@@ -12,7 +12,7 @@ private:
 
 public:
 	Point(int x = 0, int y = 0) : coord_x(x), coord_y(y) {}
-
+	//todo second is a bad name
 	Point(const Point& second)
 	{
 		coord_x = second.coord_x;
@@ -77,6 +77,8 @@ public:
 		return b;
 	}
 
+
+	//TODO copy-paste
 	double getDist() const
 	{
 		double distance = 0;
@@ -110,6 +112,7 @@ public:
 
 	virtual ~PolygonalChain()
 	{
+		//todo no clear in destructor, beeee
 		poly_number = 0;
 		poly_chain.clear();
 	}
@@ -126,6 +129,7 @@ public:
 
 	double distance(Point first, Point second) const
 	{
+		//todo = 0, why?
 		double distance = 0;
 		distance = sqrt(pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0));
 		return distance;
@@ -169,6 +173,7 @@ public:
 
 	double area() const
 	{
+		//todo doubles is overhead
 		double ar = 0.0;
 		for (int i = 0; i < getN() - 1; i++)
 		{
@@ -195,7 +200,7 @@ public:
 	Triangle(const Triangle& chain) : Polygon(chain) {}
 
 
-
+//todo without sqrt
 	bool hasRightAngle() const
 	{
 		double dist1 = distance(getPoint(0), getPoint(1));
@@ -240,6 +245,7 @@ public:
 
 };
 
+//todo regular polygon area and perimeter
 class RegularPolygon : public Polygon
 {
 public:
