@@ -11,79 +11,23 @@ private:
 	int coord_x, coord_y;
 
 public:
-	Point(int x = 0, int y = 0) : coord_x(x), coord_y(y) {}
+	Point();
 
-	Point(const Point& second)
-	{
-		coord_x = second.coord_x;
-		coord_y = second.coord_y;
-	}
+	Point(int x, int y);
 
-	Point& operator=(const Point& second)
-	{
-		coord_x = second.coord_x;
-		coord_y = second.coord_y;
-		return *this;
-	}
+	Point(const Point& another_Point);
 
-	void setX(int x)
-	{
-		coord_x = x;
-	}
-	int getX() const
-	{
-		return coord_x;
-	}
-	void setY(int y)
-	{
-		coord_y = y;
-	}
-	int getY() const
-	{
-		return coord_y;
-	}
+	Point& operator=(const Point& second);
+
+	void setX(int x);
+
+	int getX() const;
+
+	void setY(int y);
+
+	int getY() const;
 };
 
-class Line
-{
-private:
-	Point first, second;
-	double k, b;
-public:
-	Line(Point p1, Point p2)
-	{
-		first = p1;
-		second = p2;
-		if (first.getX() != second.getX())
-		{
-			k = (first.getY() - second.getY()) / (first.getX() - second.getX());
-			b = second.getY() - k * second.getX();
-		}
-		else
-		{
-			k = 0;
-			b = 0;
-		}
-
-	}
-
-	double getK() const
-	{
-		return k;
-	}
-
-	double getB() const
-	{
-		return b;
-	}
-
-	double getDist() const
-	{
-		double distance = 0;
-		distance = sqrt(pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0));
-		return distance;
-	}
-};
 
 class PolygonalChain
 {
@@ -92,161 +36,82 @@ private:
 	vector <Point> poly_chain;
 
 public:
-	PolygonalChain(int number, Point* a)
-	{
-		poly_number = number;
-		for (int i = 0; i < number; i++)
-			poly_chain.push_back(a[i]);
-	}
+	PolygonalChain(int number, Point* a);
 
-	PolygonalChain(const PolygonalChain& chain) : poly_number(chain.poly_number), poly_chain(chain.poly_chain) {}
+	PolygonalChain(const PolygonalChain& chain);
 
-	PolygonalChain& operator=(const PolygonalChain& second)
-	{
-		poly_number = second.poly_number;
-		poly_chain = second.poly_chain;
-		return *this;
-	}
+	PolygonalChain& operator=(const PolygonalChain& second);
 
-	virtual ~PolygonalChain()
-	{
-		poly_number = 0;
-		poly_chain.clear();
-	}
+	virtual ~PolygonalChain();
 
-	int getN() const
-	{
-		return poly_number;
-	}
+	int getN() const;
 
-	Point getPoint(int num) const
-	{
-		return poly_chain[num];
-	}
+	Point getPoint(int num) const;
 
-	double distance(Point first, Point second) const
-	{
-		double distance = 0;
-		distance = sqrt(pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0));
-		return distance;
-	}
+	double distance(Point first, Point second) const;
 
-	virtual double perimeter()  const
-	{
-		double per = 0;
-		for (int i = 1; i < poly_number; i++)
-		{
-			Point first = poly_chain[i - 1];
-			Point second = poly_chain[i];
-			per += distance(first, second);
-		}
-		return per;
-	}
+	double square_dist(Point first, Point second) const;
+
+	virtual double perimeter()  const;
+
 };
+
+
 
 class ClosedPolygonalChain : public PolygonalChain
 {
 public:
 
-	ClosedPolygonalChain(int n, Point* a) : PolygonalChain(n, a) {}
+	ClosedPolygonalChain(int n, Point* a);
 
-	ClosedPolygonalChain(const ClosedPolygonalChain& chain) : PolygonalChain(chain) {}
+	ClosedPolygonalChain(const ClosedPolygonalChain& chain);
 
-	double perimeter()  const
-	{
-		double per = PolygonalChain::perimeter();
-		per += distance(getPoint(0), getPoint(getN() - 1));
-		return per;
-	}
+	double perimeter()  const;
 };
 
 class Polygon : public ClosedPolygonalChain
 {
 public:
-	Polygon(int n, Point* a) : ClosedPolygonalChain(n, a) {}
+	Polygon(int n, Point* a);
 
-	Polygon(const Polygon& chain) : ClosedPolygonalChain(chain) {}
+	Polygon(const Polygon& chain);
 
-	double area() const
-	{
-		double ar = 0.0;
-		for (int i = 0; i < getN() - 1; i++)
-		{
-			double x = getPoint(i).getX();
-			double y = getPoint(i + 1).getY();
-			ar += x * y;
-		}
-		for (int i = 0; i < getN() - 1; i++)
-		{
-			double x = getPoint(i + 1).getX();
-			double y = getPoint(i).getY();
-
-			ar -= x * y;
-		}
-		return abs(ar) / 2;
-	}
+	double area() const;
 };
 
 class Triangle : public Polygon
 {
 public:
-	Triangle(int n, Point* a) : Polygon(n, a) {}
+	Triangle(int n, Point* a);
 
-	Triangle(const Triangle& chain) : Polygon(chain) {}
+	Triangle(const Triangle& chain);
 
-
-
-	bool hasRightAngle() const
-	{
-		double dist1 = distance(getPoint(0), getPoint(1));
-		double dist2 = distance(getPoint(1), getPoint(2));
-		double dist3 = distance(getPoint(0), getPoint(2));
-		double ar = 2 * area();
-		if (dist1 * dist2 == ar or dist1 * dist3 == ar or dist2 * dist3 == ar)
-			return true;
-		else
-			return false;
-	}
+	bool hasRightAngle() const;
 };
 
 class Trapezoid : public Polygon
 {
 public:
-	Trapezoid(int n, Point* a) : Polygon(n, a) {}
-	Trapezoid(const Trapezoid& chain) : Polygon(chain) {}
+	Trapezoid(int n, Point* a);
 
+	Trapezoid(const Trapezoid& chain);
 
-
-	double height() const
-	{
-		double height = 0;
-		double sum = 0.0;
-		vector <Line> lines = { Line(getPoint(0), getPoint(1)), Line(getPoint(1), getPoint(2)), Line(getPoint(2), getPoint(3)), Line(getPoint(3), getPoint(0)) };
-
-		if (lines[0].getK() == lines[2].getK())
-		{
-			sum = lines[0].getDist() + lines[2].getDist();
-			double height = 2 * area() / sum;
-			return height;
-		}
-		if (lines[1].getK() == lines[3].getK())
-		{
-			sum = lines[1].getDist() + lines[3].getDist();
-			double height = 2 * area() / sum;
-			return height;
-		}
-		return height;
-	}
+	double height() const;
 
 };
 
 class RegularPolygon : public Polygon
 {
 public:
+	RegularPolygon(int n, Point* a);
 
-	RegularPolygon(int n, Point* a) : Polygon(n, a) {}
+	RegularPolygon(const RegularPolygon& chain);
 
-	RegularPolygon(const RegularPolygon& chain) : Polygon(chain) {}
+	double get_side();
+
+	double perimeter();
+
+	double area();
 
 };
 
