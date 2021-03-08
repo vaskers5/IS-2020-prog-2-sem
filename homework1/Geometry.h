@@ -56,6 +56,7 @@ public:
 
 };
 
+//fixed copy-paste
 
 
 class ClosedPolygonalChain : public PolygonalChain
@@ -85,7 +86,7 @@ public:
 	Triangle(int n, Point* a);
 
 	Triangle(const Triangle& chain);
-
+	//do without sqrt
 	bool hasRightAngle() const;
 };
 
@@ -99,7 +100,7 @@ public:
 	double height() const;
 
 };
-
+//fixed area and perimetr
 class RegularPolygon : public Polygon
 {
 public:
