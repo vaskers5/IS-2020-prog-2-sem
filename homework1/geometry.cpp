@@ -1,5 +1,5 @@
 //fixed wtf
-#include "Geometry.h"
+#include "geometry.h"
 #include <iostream>
 #include <vector>
 #include <math.h>
