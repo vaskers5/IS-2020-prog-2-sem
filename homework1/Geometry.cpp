@@ -3,8 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <cmath>
 
 using namespace std;
+
 
 Point::Point()
 {
@@ -71,7 +73,7 @@ PolygonalChain:: ~PolygonalChain() {}
 
 int PolygonalChain::getN() const
 {
-	return poly_number;
+	return poly_chain.size();
 }
 
 Point PolygonalChain::getPoint(int num) const
@@ -147,9 +149,8 @@ bool Triangle::hasRightAngle() const
 	int dist1 = square_dist(getPoint(0), getPoint(1));
 	int dist2 = square_dist(getPoint(1), getPoint(2));
 	int dist3 = square_dist(getPoint(0), getPoint(2));
-	int sum_abc = dist1 + dist2 + dist3;
 	int gip = max(dist1, max(dist2, dist3));
-	return (sum_abc - gip == gip);
+	return (dist1 + dist2 + dist3 - gip == gip);
 }
 
 Trapezoid::Trapezoid(int n, Point* a) : Polygon(n, a) {}
