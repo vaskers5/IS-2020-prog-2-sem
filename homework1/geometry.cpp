@@ -1,4 +1,4 @@
-//fixed wtf
+// fixed wtf
 #include "geometry.h"
 #include <iostream>
 #include <vector>
@@ -14,7 +14,7 @@ Point::Point()
 	coord_y = 0;
 }
 
-Point::Point(int x, int y) 
+Point::Point(int x, int y)
 {
 	coord_x = x;
 	coord_y = y;
@@ -135,7 +135,7 @@ double Polygon::area() const
 
 		ar -= x * y;
 	}
-	return abs(ar) / 2;
+	return fabs(ar) / 2;
 }
 
 Triangle::Triangle(int n, Point* a) : Polygon(n, a) {}
@@ -185,4 +185,3 @@ double RegularPolygon::area()
 	double PI = 3.141592653589793238462643;
 	return (pow((this->get_side()), 2.0) * getN()) / (4 * tan(PI / getN()));
 }
-
