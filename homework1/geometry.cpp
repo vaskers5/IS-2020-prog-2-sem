@@ -55,7 +55,6 @@ int Point::getY() const
 
 PolygonalChain::PolygonalChain(int number, Point* a)
 {
-	poly_number = number;
 	for (int i = 0; i < number; i++)
 		poly_chain.push_back(a[i]);
 }
