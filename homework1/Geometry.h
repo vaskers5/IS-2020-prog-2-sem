@@ -50,7 +50,7 @@ public:
 
 	double distance(Point first, Point second) const;
 
-	double square_dist(Point first, Point second) const;
+	int square_dist(Point first, Point second) const;
 
 	virtual double perimeter()  const;
 

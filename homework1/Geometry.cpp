@@ -85,9 +85,9 @@ double PolygonalChain::distance(Point first, Point second) const
 	return distance;
 }
 
-double PolygonalChain::square_dist(Point first, Point second) const
+int PolygonalChain::square_dist(Point first, Point second) const
 {
-	double dist = pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0);
+	int dist = pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0);
 	return dist;
 }
 
@@ -144,15 +144,12 @@ Triangle::Triangle(const Triangle& chain) : Polygon(chain) {}
 
 bool Triangle::hasRightAngle() const
 {
-	double dist1 = square_dist(getPoint(0), getPoint(1));
-	double dist2 = square_dist(getPoint(1), getPoint(2));
-	double dist3 = square_dist(getPoint(0), getPoint(2));
-	double sum_abc = dist1 + dist2 + dist3;
-	double gip = max(dist1, max(dist2, dist3));
-	if (sum_abc - gip == gip)
-		return true;
-	else
-		return false;
+	int dist1 = square_dist(getPoint(0), getPoint(1));
+	int dist2 = square_dist(getPoint(1), getPoint(2));
+	int dist3 = square_dist(getPoint(0), getPoint(2));
+	int sum_abc = dist1 + dist2 + dist3;
+	int gip = max(dist1, max(dist2, dist3));
+	return (sum_abc - gip == gip);
 }
 
 Trapezoid::Trapezoid(int n, Point* a) : Polygon(n, a) {}
@@ -160,7 +157,7 @@ Trapezoid::Trapezoid(int n, Point* a) : Polygon(n, a) {}
 Trapezoid::Trapezoid(const Trapezoid& chain) : Polygon(chain) {}
 
 
-
+//do adecvat height
 double Trapezoid::height() const
 {
 	double height = 0;
