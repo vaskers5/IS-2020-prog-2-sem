@@ -1,5 +1,5 @@
-//fixed wtf
-#include "Geometry.h"
+// fixed wtf
+#include "geometry.h"
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -14,7 +14,7 @@ Point::Point()
 	coord_y = 0;
 }
 
-Point::Point(int x, int y) 
+Point::Point(int x, int y)
 {
 	coord_x = x;
 	coord_y = y;
@@ -55,7 +55,6 @@ int Point::getY() const
 
 PolygonalChain::PolygonalChain(int number, Point* a)
 {
-	poly_number = number;
 	for (int i = 0; i < number; i++)
 		poly_chain.push_back(a[i]);
 }
@@ -96,7 +95,7 @@ int PolygonalChain::square_dist(Point first, Point second) const
 double PolygonalChain::perimeter()  const
 {
 	double per = 0;
-	for (int i = 1; i < poly_number; i++)
+	for (int i = 1; i < getN(); i++)
 	{
 		Point first = poly_chain[i - 1];
 		Point second = poly_chain[i];
@@ -136,7 +135,7 @@ double Polygon::area() const
 
 		ar -= x * y;
 	}
-	return abs(ar) / 2;
+	return fabs(ar) / 2;
 }
 
 Triangle::Triangle(int n, Point* a) : Polygon(n, a) {}
@@ -186,4 +185,3 @@ double RegularPolygon::area()
 	double PI = 3.141592653589793238462643;
 	return (pow((this->get_side()), 2.0) * getN()) / (4 * tan(PI / getN()));
 }
-
