@@ -95,7 +95,7 @@ int PolygonalChain::square_dist(Point first, Point second) const
 double PolygonalChain::perimeter()  const
 {
 	double per = 0;
-	for (int i = 1; i < poly_number; i++)
+	for (int i = 1; i < getN(); i++)
 	{
 		Point first = poly_chain[i - 1];
 		Point second = poly_chain[i];
