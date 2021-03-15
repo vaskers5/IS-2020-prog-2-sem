@@ -1,8 +1,8 @@
 // fixed wtf
+#define _USE_MATH_DEFINES
 #include "geometry.h"
 #include <iostream>
 #include <vector>
-#include <math.h>
 #include <cmath>
 
 using namespace std;
@@ -59,20 +59,15 @@ PolygonalChain::PolygonalChain(int number, Point* a)
 		poly_chain.push_back(a[i]);
 }
 
-PolygonalChain::PolygonalChain(const PolygonalChain& chain) { poly_number = chain.poly_number, poly_chain = chain.poly_chain; }
+PolygonalChain::PolygonalChain(const PolygonalChain& chain) { poly_chain = chain.poly_chain; }
 
-PolygonalChain& PolygonalChain::operator=(const PolygonalChain& second)
-{
-	poly_number = second.poly_number;
-	poly_chain = second.poly_chain;
-	return *this;
-}
+PolygonalChain& PolygonalChain::operator=(const PolygonalChain& second) = default;
 
 PolygonalChain:: ~PolygonalChain() {}
 
 int PolygonalChain::getN() const
 {
-	return poly_chain.size();
+	return this->poly_chain.size();
 }
 
 Point PolygonalChain::getPoint(int num) const
@@ -104,9 +99,7 @@ double PolygonalChain::perimeter()  const
 	return per;
 }
 
-ClosedPolygonalChain::ClosedPolygonalChain(int n, Point* a) : PolygonalChain(n, a) {}
-
-ClosedPolygonalChain::ClosedPolygonalChain(const ClosedPolygonalChain& chain) : PolygonalChain(chain) {}
+ClosedPolygonalChain::ClosedPolygonalChain(int n, Point * a) : PolygonalChain(n, a) {}
 
 double ClosedPolygonalChain::perimeter()  const
 {
@@ -115,9 +108,7 @@ double ClosedPolygonalChain::perimeter()  const
 	return per;
 }
 
-Polygon::Polygon(int n, Point* a) : ClosedPolygonalChain(n, a) {}
-
-Polygon::Polygon(const Polygon& chain) : ClosedPolygonalChain(chain) {}
+Polygon::Polygon(int n, Point * a) : ClosedPolygonalChain(n, a) {}
 
 double Polygon::area() const
 {
@@ -138,10 +129,7 @@ double Polygon::area() const
 	return fabs(ar) / 2;
 }
 
-Triangle::Triangle(int n, Point* a) : Polygon(n, a) {}
-
-Triangle::Triangle(const Triangle& chain) : Polygon(chain) {}
-
+Triangle::Triangle(int n, Point * a) : Polygon(n, a) {}
 
 bool Triangle::hasRightAngle() const
 {
@@ -152,24 +140,17 @@ bool Triangle::hasRightAngle() const
 	return (dist1 + dist2 + dist3 - gip == gip);
 }
 
-Trapezoid::Trapezoid(int n, Point* a) : Polygon(n, a) {}
-
-Trapezoid::Trapezoid(const Trapezoid& chain) : Polygon(chain) {}
-
+Trapezoid::Trapezoid(int n, Point * a) : Polygon(n, a) {}
 
 //do adecvat height
 double Trapezoid::height() const
 {
-	double height = 0;
-	double sum = 0.0;
 	double first_base = distance(getPoint(1), getPoint(2));
 	double second_base = distance(getPoint(3), getPoint(0));
 	return 2 * (this->area()) / (first_base + second_base);
 }
 
-RegularPolygon::RegularPolygon(int n, Point* a) : Polygon(n, a) {}
-
-RegularPolygon::RegularPolygon(const RegularPolygon& chain) : Polygon(chain) {}
+RegularPolygon::RegularPolygon(int n, Point * a) : Polygon(n, a) {}
 
 double RegularPolygon::get_side()
 {
@@ -182,6 +163,5 @@ double RegularPolygon::perimeter()
 
 double RegularPolygon::area()
 {
-	double PI = 3.141592653589793238462643;
-	return (pow((this->get_side()), 2.0) * getN()) / (4 * tan(PI / getN()));
+	return (pow((this->get_side()), 2.0) * getN()) / (4 * tan(M_PI / getN()));
 }
