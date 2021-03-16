@@ -18,7 +18,7 @@ public:
 
 	Point(const Point& another_Point);
 
-	virtual Point& operator=(const Point& second);
+	virtual Point& operator=(const Point& another);
 
 	void setX(int x);
 
@@ -40,7 +40,7 @@ public:
 
 	PolygonalChain(const PolygonalChain& chain);
 
-	virtual PolygonalChain& operator=(const PolygonalChain& second);
+	virtual PolygonalChain& operator=(const PolygonalChain& another);
 
 	virtual ~PolygonalChain();
 
@@ -48,9 +48,9 @@ public:
 
 	Point getPoint(int num) const;
 
-	double distance(Point first, Point second) const;
+	double distance(const Point& first, const Point& second) const;
 
-	int square_dist(Point first, Point second) const;
+	int square_dist(const Point& first, const Point& second) const;
 
 	virtual double perimeter()  const;
 

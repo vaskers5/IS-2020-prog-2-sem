@@ -26,10 +26,10 @@ Point::Point(const Point& another_Point)
 	coord_y = another_Point.coord_y;
 }
 
-Point& Point::operator=(const Point& second)
+Point& Point::operator=(const Point& another)
 {
-	coord_x = second.coord_x;
-	coord_y = second.coord_y;
+	coord_x = another.coord_x;
+	coord_y = another.coord_y;
 	return *this;
 }
 
@@ -61,10 +61,10 @@ PolygonalChain::PolygonalChain(int number, Point* a)
 
 PolygonalChain::PolygonalChain(const PolygonalChain& chain) { poly_chain = chain.poly_chain; }
 
-//todo second is a bad name
-PolygonalChain& PolygonalChain::operator=(const PolygonalChain& second) = default;
+//fixed second is a bad name
+PolygonalChain& PolygonalChain::operator=(const PolygonalChain& another) = default;
 
-PolygonalChain:: ~PolygonalChain() {}
+PolygonalChain:: ~PolygonalChain() = default;
 
 int PolygonalChain::getN() const
 {
@@ -76,15 +76,15 @@ Point PolygonalChain::getPoint(int num) const
 	return poly_chain[num];
 }
 
-//todo const&
-double PolygonalChain::distance(Point first, Point second) const
+//fixed const&
+double PolygonalChain::distance(const Point& first, const Point& second) const
 {
-	double distance = sqrt(pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0));
+	double distance = sqrt(square_dist(first,second));
 	return distance;
 }
 
-//todo copy-paste dist
-int PolygonalChain::square_dist(Point first, Point second) const
+//fixed copy-paste
+int PolygonalChain::square_dist(const Point& first, const Point& second) const
 {
 	int dist = pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0);
 	return dist;
@@ -96,8 +96,8 @@ double PolygonalChain::perimeter()  const
 	for (int i = 1; i < getN(); i++)
 	{
 		Point first = poly_chain[i - 1];
-		Point second = poly_chain[i];
-		per += distance(first, second);
+		Point another = poly_chain[i];
+		per += distance(first, another);
 	}
 	return per;
 }
@@ -149,8 +149,8 @@ Trapezoid::Trapezoid(int n, Point * a) : Polygon(n, a) {}
 double Trapezoid::height() const
 {
 	double first_base = distance(getPoint(1), getPoint(2));
-	double second_base = distance(getPoint(3), getPoint(0));
-	return 2 * (this->area()) / (first_base + second_base);
+	double another_base = distance(getPoint(3), getPoint(0));
+	return 2 * (this->area()) / (first_base + another_base);
 }
 
 RegularPolygon::RegularPolygon(int n, Point * a) : Polygon(n, a) {}
