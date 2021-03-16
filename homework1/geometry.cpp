@@ -61,6 +61,7 @@ PolygonalChain::PolygonalChain(int number, Point* a)
 
 PolygonalChain::PolygonalChain(const PolygonalChain& chain) { poly_chain = chain.poly_chain; }
 
+//todo second is a bad name
 PolygonalChain& PolygonalChain::operator=(const PolygonalChain& second) = default;
 
 PolygonalChain:: ~PolygonalChain() {}
@@ -75,12 +76,14 @@ Point PolygonalChain::getPoint(int num) const
 	return poly_chain[num];
 }
 
+//todo const&
 double PolygonalChain::distance(Point first, Point second) const
 {
 	double distance = sqrt(pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0));
 	return distance;
 }
 
+//todo copy-paste dist
 int PolygonalChain::square_dist(Point first, Point second) const
 {
 	int dist = pow(first.getX() - second.getX(), 2.0) + pow(first.getY() - second.getY(), 2.0);
