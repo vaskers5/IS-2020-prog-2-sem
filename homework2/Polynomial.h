@@ -201,12 +201,12 @@ public:
     //todo get O(n)
     double get(int number)
     {
-        int it = min_pow;
-        double ans = 0.0;
-        for (int i = 0; i < size; i++)
+        double it = polynom[0]*powf(number,min_pow);
+        double ans = it;
+        for (int i = 1; i < size; i++)
         {
-            ans += polynom[i]*pow(number, it);
-            it++;
+            it*=number;
+            ans += polynom[i]*it;
         }
         return ans;
     }
