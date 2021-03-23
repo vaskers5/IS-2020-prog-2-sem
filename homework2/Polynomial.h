@@ -81,28 +81,34 @@ public:
             polynom[i] = 0;
         }
     }
-    int operator[](int p) const
+    int operator[](int number) const
     {
-        if (p < min_pow || p > max_pow)
+        if (number < min_pow || number > max_pow)
             return 0;
-        return polynom[p - min_pow];
+        return polynom[number - min_pow];
     }
 
-    int& operator[](int p)
+    int& operator[](int number)
     {
-        if (p < min_pow || p > max_pow)
-            resize(std::min(min_pow, p), std::max(max_pow, p));
-        return polynom[p - min_pow];
+        if (number < min_pow || number > max_pow)
+            make(min(min_pow, number), max(max_pow, number));
+        return polynom[number - min_pow];
     }
 
-    void resize(int newMinPow, int newMaxPow) {
-        //fixed using
-        Polynomial t(newMinPow, newMaxPow);
-        for (int p = max(min_pow, newMinPow); p <= min(max_pow, newMaxPow); p++) {
-            t.polynom[p - newMinPow] = polynom[p - min_pow];
+    void make(int new_min_pow, int new_max_pow)
+    {
+       int  new_size =  new_max_pow-new_min_pow + 1;
+        int* kost = new int[new_size];
+        for (int i = 0; i < new_size; i++)
+        {
+            kost[i] = 0;
         }
-
-        *this = t;
+        Polynomial another(new_min_pow, new_max_pow,kost);
+        for (int it = max(min_pow, new_min_pow); it <= min(max_pow, new_max_pow); it++)
+        {
+            another.polynom[it - new_min_pow] = polynom[it - min_pow];
+        }
+        *this = another;
     }
 
     bool operator==(const Polynomial& second) const
