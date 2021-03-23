@@ -195,17 +195,17 @@ public:
 
     friend Polynomial operator*(const Polynomial& first, const Polynomial& second)
     {
-        int comb_min = first.min_pow*second.min_pow;
-        int comb_max = first.max_pow*second.max_pow;
-        int comb_size = comb_max - comb_min + 1;
-        int* comb_pol = new int[comb_size];
+        int new_min = first.min_pow*second.min_pow;
+        int new_max = first.max_pow*second.max_pow;
+        int new_size = new_max - new_min + 1;
+        int* comb_pol = new int[new_size];
 
-        for (int i = 0; i < comb_size; i++)
+        for (int i = 0; i < new_size; i++)
             comb_pol[i] = 0;
         for (int i = 0; i < first.size; i++)
             for (int j = 0; j < second.size; j++)
-                comb_pol[first.min_pow + i + second.min_pow + j - comb_min] += first.polynom[i] * second.polynom[j];
-        return Polynomial(comb_min, comb_max, comb_pol);
+                comb_pol[first.min_pow + i + second.min_pow + j - new_min] += first.polynom[i] * second.polynom[j];
+        return Polynomial(new_min, new_max, comb_pol);
     }
 
     friend Polynomial operator/(const Polynomial& another, int number)
