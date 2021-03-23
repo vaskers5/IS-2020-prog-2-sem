@@ -168,16 +168,39 @@ public:
         *this = (*this - second);
         return *this;
     }
-
-    Polynomial operator*(int number)
+    //to do with copy-constructor
+    friend Polynomial operator*(int number,Polynomial D)
     {
-        for (int i = 0; i < size; i++)
-            polynom[i] *= number;
+        for (int i = 0; i < D.size; i++)
+            D.polynom[i] *= number;
 
-        return *this;
+        return D;
     }
 
+    friend Polynomial operator*(Polynomial D,int number)
+    {
+        return number*D;
+    }
 
+    Polynomial operator *=(int number)
+    {
+        return *(this) * number;
+    }
+
+    friend Polynomial operator*(const Polynomial& first, const Polynomial& second)
+    {
+        int comb_min = first.min_pow*second.min_pow;
+        int comb_max = first.max_pow*second.max_pow;
+        int comb_size = comb_max - comb_min + 1;
+        int* comb_pol = new int[comb_size];
+
+        for (int i = 0; i < comb_size; i++)
+            comb_pol[i] = 0;
+        for (int i = 0; i < first.size; i++)
+            for (int j = 0; j < second.size; j++)
+                comb_pol[first.min_pow + i + second.min_pow + j - comb_min] += first.polynom[i] * second.polynom[j];
+        return Polynomial(comb_min, comb_max, comb_pol);
+    }
 
     friend Polynomial operator/(const Polynomial& another, int number)
     {
@@ -194,10 +217,6 @@ public:
         return *this / number;
     }
 
-    Polynomial operator *=(int number)
-    {
-        return *(this) * number;
-    }
     //todo get O(n)
     double get(int number)
     {
