@@ -37,19 +37,52 @@ public:
             polynom[i] = poly[i];
         }
     }
-    //todo delete[]
+
+    //fixed delete[]
     ~Polynomial()
     {
-        delete polynom;
+        delete[] polynom;
     }
-    //todo no default
-    Polynomial(const Polynomial& another) = default;
+    //fixed no default
+    Polynomial(const Polynomial& another)
+    {
+        min_pow = another.min_pow;
+        max_pow = another.max_pow;
+        size = another.size;
+        polynom = new int[size];
+        for (int i = 0; i < size; i++)
+        {
+            polynom[i] = another.polynom[i];
+        }
+       // return *this;
+    }
 
+    //fixed no default
+    Polynomial& operator=(const Polynomial& another)
+    {
+        min_pow = another.min_pow;
+        max_pow = another.max_pow;
+        size = another.size;
+        for (int i = 0; i < size; i++)
+        {
+            polynom[i] = another.polynom[i];
+        }
+        return *this;
+    }
 
-    Polynomial& operator=(const Polynomial& another) = default;
-
-
-    int operator[](int p) const {
+    Polynomial (int min, int max)
+    {
+        max_pow = max;
+        min_pow = min;
+        size = max_pow - min_pow + 1;
+        polynom = new int[size];
+        for (int i = 0; i < size; i++)
+        {
+            polynom[i] = 0;
+        }
+    }
+    int operator[](int p) const
+    {
         if (p < min_pow || p > max_pow)
             return 0;
         return polynom[p - min_pow];
@@ -58,14 +91,18 @@ public:
     int& operator[](int p)
     {
         if (p < min_pow || p > max_pow)
-        {
-            int new_size = max(max_pow, p) - min(min_pow, p) + 1;
-            int* koef = new int[new_size];
-            //todo make function
-            Polynomial check(min(min_pow, p), max(max_pow, p), koef);
-            *this += check;
-        }
+            resize(std::min(min_pow, p), std::max(max_pow, p));
         return polynom[p - min_pow];
+    }
+
+    void resize(int newMinPow, int newMaxPow) {
+        //fixed using
+        Polynomial t(newMinPow, newMaxPow);
+        for (int p = max(min_pow, newMinPow); p <= min(max_pow, newMaxPow); p++) {
+            t.polynom[p - newMinPow] = polynom[p - min_pow];
+        }
+
+        *this = t;
     }
 
     bool operator==(const Polynomial& second) const
@@ -110,7 +147,6 @@ public:
         return *this;
     }
 
-
     Polynomial operator-() const
     {
         int *temp = new int[size];
@@ -119,7 +155,6 @@ public:
 
         return Polynomial(min_pow, max_pow, temp);
     }
-
 
     Polynomial operator-(const Polynomial& second)
     {
@@ -163,7 +198,7 @@ public:
     {
         return *(this) * number;
     }
-	//todo get O(n)
+    //todo get O(n)
     double get(int number)
     {
         int it = min_pow;
