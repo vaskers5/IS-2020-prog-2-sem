@@ -37,12 +37,12 @@ public:
             polynom[i] = poly[i];
         }
     }
-
+    //todo delete[]
     ~Polynomial()
     {
         delete polynom;
     }
-
+    //todo no default
     Polynomial(const Polynomial& another) = default;
 
 
@@ -61,8 +61,9 @@ public:
         {
             int new_size = max(max_pow, p) - min(min_pow, p) + 1;
             int* koef = new int[new_size];
+            //todo make function
             Polynomial check(min(min_pow, p), max(max_pow, p), koef);
-            *this +=  check;
+            *this += check;
         }
         return polynom[p - min_pow];
     }
@@ -80,6 +81,7 @@ public:
         return !(*this == second);
     }
 
+    //todo + from +=
     Polynomial operator+(const Polynomial& second) const
     {
         int new_min_pow = min(min_pow, second.min_pow);
@@ -145,6 +147,7 @@ public:
     friend Polynomial operator/(const Polynomial& another, int number)
     {
         int* kost = new int[another.size];
+        //todo for_each
         for (int i = 0; i < another.size; i++)
             kost[i] = another.polynom[i] / number;
 
@@ -160,7 +163,7 @@ public:
     {
         return *(this) * number;
     }
-
+	//todo get O(n)
     double get(int number)
     {
         int it = min_pow;
