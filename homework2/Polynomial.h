@@ -54,7 +54,7 @@ public:
         {
             polynom[i] = another.polynom[i];
         }
-       // return *this;
+        // return *this;
     }
 
     //fixed no default
@@ -63,6 +63,7 @@ public:
         min_pow = another.min_pow;
         max_pow = another.max_pow;
         size = another.size;
+        polynom = new int[size];
         for (int i = 0; i < size; i++)
         {
             polynom[i] = another.polynom[i];
@@ -97,7 +98,7 @@ public:
 
     void make(int new_min_pow, int new_max_pow)
     {
-       int  new_size =  new_max_pow-new_min_pow + 1;
+        int  new_size =  new_max_pow-new_min_pow + 1;
         int* kost = new int[new_size];
         for (int i = 0; i < new_size; i++)
         {
@@ -282,4 +283,3 @@ public:
         }
     }
 };
-
