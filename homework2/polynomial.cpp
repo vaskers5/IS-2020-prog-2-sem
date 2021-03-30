@@ -21,7 +21,7 @@ Polynomial::Polynomial(int min, int max, const int *poly) {
         polynom[i] = poly[i];
     }
 }
-//fixed delete[]
+
 Polynomial::~Polynomial() {
     delete[] polynom;
 }
@@ -36,8 +36,8 @@ Polynomial::Polynomial(const Polynomial &another) {
     }
 }
 
-//fixed no default
 Polynomial &Polynomial::operator=(const Polynomial &another) {
+    //todo old memory leak
     min_pow = another.min_pow;
     max_pow = another.max_pow;
     size = another.size;
@@ -84,7 +84,7 @@ bool Polynomial::operator!=(const Polynomial &second) const {
     return !(*this == second);
 }
 
-//fixed from +=
+//todo use copy-constructor
 Polynomial Polynomial::operator+(const Polynomial &second) const {
     Polynomial another = Polynomial();
     another += *this;
@@ -121,6 +121,7 @@ Polynomial &Polynomial::operator+=(const Polynomial &second) {
 }
 
 Polynomial Polynomial::operator-() const {
+    //todo memory leak
     int *temp = new int[size];
     for (int i = 0; i < size; i++)
         temp[i] = -polynom[i];
@@ -128,16 +129,19 @@ Polynomial Polynomial::operator-() const {
     return Polynomial(min_pow, max_pow, temp);
 }
 
+//todo without creating new object
 Polynomial Polynomial::operator-(const Polynomial &second) const {
     Polynomial check = *this + (-second);
     return check;
 }
 
+//todo - from -=
 Polynomial & Polynomial::operator-=(const Polynomial &second) {
     *this = (*this - second);
     return *this;
 }
 
+//todo no capital letters for variables
 Polynomial operator*(int number, Polynomial D) {
     for (int i = 0; i < D.size; i++)
         D.polynom[i] *= number;
@@ -163,20 +167,17 @@ Polynomial operator*(const Polynomial &first, const Polynomial &second) {
     return Polynomial(new_min, new_max, comb_pol);
 }
 
-
-//fixed for_each
+//todo / from /=
 Polynomial operator/(const Polynomial &another, int number) {
     Polynomial check = Polynomial(another);
     for_each(check.polynom, check.polynom+check.size, [&](int& poly){poly/=number;});
     return check;
 }
 
-//std::for_each(coefs, coefs+size, [&](int& coef){coef/=n;});
 Polynomial Polynomial::operator/=(int number) const {
     return *this / number;
 }
 
-//fixed get O(n)
 double Polynomial::get(int number) {
     double it = polynom[0] * powf(number, min_pow);
     double ans = it;
