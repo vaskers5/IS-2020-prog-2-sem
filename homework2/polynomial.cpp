@@ -37,10 +37,11 @@ Polynomial::Polynomial(const Polynomial &another) {
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &another) {
-    //todo old memory leak
+    // fixed old memory leak
     min_pow = another.min_pow;
     max_pow = another.max_pow;
     size = another.size;
+    delete[] polynom;
     polynom = new int[size];
     for (int i = 0; i < size; i++) {
         polynom[i] = another.polynom[i];
@@ -84,12 +85,10 @@ bool Polynomial::operator!=(const Polynomial &second) const {
     return !(*this == second);
 }
 
-//todo use copy-constructor
+//fixed use copy-constructor
 Polynomial Polynomial::operator+(const Polynomial &second) const {
-    Polynomial another = Polynomial();
+    Polynomial another = Polynomial(second);
     another += *this;
-    another += second;
-
     return another;
 
 }
@@ -121,32 +120,31 @@ Polynomial &Polynomial::operator+=(const Polynomial &second) {
 }
 
 Polynomial Polynomial::operator-() const {
-    //todo memory leak
-    int *temp = new int[size];
+    //fixed  memory leak
+    int *kost = new int[size];
     for (int i = 0; i < size; i++)
-        temp[i] = -polynom[i];
-
-    return Polynomial(min_pow, max_pow, temp);
+        kost[i] = -polynom[i];
+    auto another =  Polynomial(min_pow, max_pow, kost);
+    delete[] kost;
+    return another;
 }
 
-//todo without creating new object
+//fixed without creating new object
 Polynomial Polynomial::operator-(const Polynomial &second) const {
-    Polynomial check = *this + (-second);
-    return check;
+    return *this + (-second);
 }
 
-//todo - from -=
 Polynomial & Polynomial::operator-=(const Polynomial &second) {
-    *this = (*this - second);
+    *this =*this + (-second);;
     return *this;
 }
 
-//todo no capital letters for variables
-Polynomial operator*(int number, Polynomial D) {
-    for (int i = 0; i < D.size; i++)
-        D.polynom[i] *= number;
+//fixed no capital letters for variables
+Polynomial operator*(int number, Polynomial another) {
+    for (int i = 0; i < another.size; i++)
+        another.polynom[i] *= number;
 
-    return D;
+    return another;
 }
 
 Polynomial Polynomial::operator*=(int number) {
@@ -167,15 +165,15 @@ Polynomial operator*(const Polynomial &first, const Polynomial &second) {
     return Polynomial(new_min, new_max, comb_pol);
 }
 
-//todo / from /=
+//fixed / from /=
 Polynomial operator/(const Polynomial &another, int number) {
     Polynomial check = Polynomial(another);
-    for_each(check.polynom, check.polynom+check.size, [&](int& poly){poly/=number;});
-    return check;
+    return check/=number;
 }
 
 Polynomial Polynomial::operator/=(int number) const {
-    return *this / number;
+    for_each(polynom, polynom+size, [&](int& poly){poly/=number;});
+    return *this;;
 }
 
 double Polynomial::get(int number) {

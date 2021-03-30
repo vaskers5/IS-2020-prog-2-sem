@@ -19,13 +19,10 @@ public:
 
     Polynomial(int min, int max, const int *poly);
 
-    //fixed delete[]
     ~Polynomial();
 
-    //fixed no default
     Polynomial(const Polynomial &another);
 
-    //fixed no default
     Polynomial &operator=(const Polynomial &another);
 
     int operator[](int number) const;
