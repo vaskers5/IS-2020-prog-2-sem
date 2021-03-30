@@ -454,5 +454,5 @@ ostream &operator<<(ostream &output, const Polynomial &D) {
         }
         return output;
     }
->>>>>>> 77f42ef8aa0a3e9a6dd671a13f0bc3901f7c388c:homework2/polynomial.cpp
+
 }
