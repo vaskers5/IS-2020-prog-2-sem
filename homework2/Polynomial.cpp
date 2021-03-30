@@ -163,15 +163,15 @@ Polynomial operator*(const Polynomial &first, const Polynomial &second) {
     return Polynomial(new_min, new_max, comb_pol);
 }
 
-Polynomial operator/(const Polynomial &another, int number) {
-    int *kost = new int[another.size];
-    //todo for_each
-    for (int i = 0; i < another.size; i++)
-        kost[i] = another.polynom[i] / number;
 
-    return Polynomial(another.min_pow, another.max_pow, kost);
+//fixed for_each
+Polynomial operator/(const Polynomial &another, int number) {
+    Polynomial check = Polynomial(another);
+    for_each(check.polynom, check.polynom+check.size, [&](int& poly){poly/=number;});
+    return check;
 }
 
+//std::for_each(coefs, coefs+size, [&](int& coef){coef/=n;});
 Polynomial Polynomial::operator/=(int number) const {
     return *this / number;
 }
