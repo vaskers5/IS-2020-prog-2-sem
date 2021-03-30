@@ -1,4 +1,4 @@
-<<<<<<< HEAD:homework2/Polynomial.cpp
+
 #include "polynomial.h"
 
 using namespace std;
