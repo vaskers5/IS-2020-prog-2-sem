@@ -37,7 +37,8 @@ Polynomial::Polynomial(const Polynomial &another) {
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &another) {
-    // fixed old memory leak
+	if (&another == this)
+		return *this;
     min_pow = another.min_pow;
     max_pow = another.max_pow;
     size = another.size;
@@ -85,7 +86,6 @@ bool Polynomial::operator!=(const Polynomial &second) const {
     return !(*this == second);
 }
 
-//fixed strange use of copy-constructor
 Polynomial Polynomial::operator+(const Polynomial &second) const {
     Polynomial another = second;
     another += *this;
@@ -135,6 +135,7 @@ Polynomial Polynomial::operator-(const Polynomial &second) const {
     return temp;
 }
 
+//todo copy-paste
 Polynomial & Polynomial::operator-=(const Polynomial &second) {
     int new_min_pow = min(min_pow, second.min_pow);
     int new_max_pow = max(max_pow, second.max_pow);
