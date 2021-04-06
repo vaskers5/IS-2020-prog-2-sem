@@ -85,7 +85,7 @@ bool Polynomial::operator!=(const Polynomial &second) const {
     return !(*this == second);
 }
 
-//fixed use copy-constructor
+//todo strange use of copy-constructor
 Polynomial Polynomial::operator+(const Polynomial &second) const {
     Polynomial another = Polynomial(second);
     another += *this;
@@ -120,7 +120,6 @@ Polynomial &Polynomial::operator+=(const Polynomial &second) {
 }
 
 Polynomial Polynomial::operator-() const {
-    //fixed  memory leak
     int *kost = new int[size];
     for (int i = 0; i < size; i++)
         kost[i] = -polynom[i];
@@ -129,7 +128,7 @@ Polynomial Polynomial::operator-() const {
     return another;
 }
 
-//fixed without creating new object
+//todo nope, it's still here
 Polynomial Polynomial::operator-(const Polynomial &second) const {
     return *this + (-second);
 }
@@ -139,7 +138,7 @@ Polynomial & Polynomial::operator-=(const Polynomial &second) {
     return *this;
 }
 
-//fixed no capital letters for variables
+
 Polynomial operator*(int number, Polynomial another) {
     for (int i = 0; i < another.size; i++)
         another.polynom[i] *= number;
@@ -165,10 +164,10 @@ Polynomial operator*(const Polynomial &first, const Polynomial &second) {
     return Polynomial(new_min, new_max, comb_pol);
 }
 
-//fixed / from /=
+
 Polynomial operator/(const Polynomial &another, int number) {
     Polynomial check = Polynomial(another);
-    return check/=number;
+    return check /= number;
 }
 
 Polynomial Polynomial::operator/=(int number) const {
