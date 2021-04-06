@@ -37,8 +37,8 @@ Polynomial::Polynomial(const Polynomial &another) {
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &another) {
-	if (&another == this)
-		return *this;
+    if (&another == this)
+        return *this;
     min_pow = another.min_pow;
     max_pow = another.max_pow;
     size = another.size;
@@ -94,29 +94,7 @@ Polynomial Polynomial::operator+(const Polynomial &second) const {
 }
 
 Polynomial &Polynomial::operator+=(const Polynomial &second) {
-    int new_min_pow = min(min_pow, second.min_pow);
-    int new_max_pow = max(max_pow, second.max_pow);
-    int new_size;
-    new_size = new_max_pow - new_min_pow + 1;
-
-    int *kost = new int[new_size];
-
-    for (int i = 0; i < new_max_pow - new_min_pow + 1; i++)
-        kost[i] = 0;
-
-    for (int i = 0; i < size; i++)
-        kost[min_pow + i - new_min_pow] += polynom[i];
-
-    for (int i = 0; i < second.size; i++)
-        kost[second.min_pow + i - new_min_pow] += second.polynom[i];
-
-    make(new_min_pow, new_max_pow);
-    for (int i = 0; i < size; i++)
-        this->polynom[i] = kost[i];
-    this->min_pow = new_min_pow;
-    this->max_pow = new_max_pow;
-    this->size = size;
-    return *this;
+    return pom(*this,second,1);
 }
 
 Polynomial Polynomial::operator-() const {
@@ -135,10 +113,9 @@ Polynomial Polynomial::operator-(const Polynomial &second) const {
     return temp;
 }
 
-//todo copy-paste
-Polynomial & Polynomial::operator-=(const Polynomial &second) {
-    int new_min_pow = min(min_pow, second.min_pow);
-    int new_max_pow = max(max_pow, second.max_pow);
+Polynomial & Polynomial::pom(Polynomial &first, const Polynomial &second, int num) {
+    int new_min_pow = min(first.min_pow, second.min_pow);
+    int new_max_pow = max(first.max_pow, second.max_pow);
     int new_size;
     new_size = new_max_pow - new_min_pow + 1;
 
@@ -147,19 +124,24 @@ Polynomial & Polynomial::operator-=(const Polynomial &second) {
     for (int i = 0; i < new_max_pow - new_min_pow + 1; i++)
         kost[i] = 0;
 
-    for (int i = 0; i < size; i++)
-        kost[min_pow + i - new_min_pow] += polynom[i];
+    for (int i = 0; i < first.size; i++)
+        kost[first.min_pow + i - new_min_pow] += first.polynom[i];
 
     for (int i = 0; i < second.size; i++)
-        kost[second.min_pow + i - new_min_pow] -= second.polynom[i];
+        kost[second.min_pow + i - new_min_pow] += second.polynom[i]*num;
 
     make(new_min_pow, new_max_pow);
-    for (int i = 0; i < size; i++)
-        this->polynom[i] = kost[i];
-    this->min_pow = new_min_pow;
-    this->max_pow = new_max_pow;
-    this->size = size;
-    return *this;
+    for (int i = 0; i < first.size; i++)
+        first.polynom[i] = kost[i];
+    first.min_pow = new_min_pow;
+    first.max_pow = new_max_pow;
+    first.size = new_size;
+    return first;
+}
+
+//fixed copy-paste
+Polynomial & Polynomial::operator-=(const Polynomial &second) {
+    return pom(*this,second,-1);
 }
 
 
