@@ -65,4 +65,6 @@ public:
     double get(int number);
 
     friend ostream &operator<<(ostream &output, const Polynomial &D);
+
+    Polynomial & pom(Polynomial &first, const Polynomial &second, int num);
 };
