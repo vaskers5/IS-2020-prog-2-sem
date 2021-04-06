@@ -85,9 +85,9 @@ bool Polynomial::operator!=(const Polynomial &second) const {
     return !(*this == second);
 }
 
-//todo strange use of copy-constructor
+//fixed strange use of copy-constructor
 Polynomial Polynomial::operator+(const Polynomial &second) const {
-    Polynomial another = Polynomial(second);
+    Polynomial another = second;
     another += *this;
     return another;
 
@@ -128,13 +128,36 @@ Polynomial Polynomial::operator-() const {
     return another;
 }
 
-//todo nope, it's still here
+//fixed nope, it's still here
 Polynomial Polynomial::operator-(const Polynomial &second) const {
-    return *this + (-second);
+    auto temp =*this;
+    temp-=second;
+    return temp;
 }
 
 Polynomial & Polynomial::operator-=(const Polynomial &second) {
-    *this =*this + (-second);;
+    int new_min_pow = min(min_pow, second.min_pow);
+    int new_max_pow = max(max_pow, second.max_pow);
+    int new_size;
+    new_size = new_max_pow - new_min_pow + 1;
+
+    int *kost = new int[new_size];
+
+    for (int i = 0; i < new_max_pow - new_min_pow + 1; i++)
+        kost[i] = 0;
+
+    for (int i = 0; i < size; i++)
+        kost[min_pow + i - new_min_pow] += polynom[i];
+
+    for (int i = 0; i < second.size; i++)
+        kost[second.min_pow + i - new_min_pow] -= second.polynom[i];
+
+    make(new_min_pow, new_max_pow);
+    for (int i = 0; i < size; i++)
+        this->polynom[i] = kost[i];
+    this->min_pow = new_min_pow;
+    this->max_pow = new_max_pow;
+    this->size = size;
     return *this;
 }
 
