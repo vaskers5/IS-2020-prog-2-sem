@@ -12,7 +12,7 @@
 #include <iterator>
 #include <cmath>
 #include <windows.h>
-
+const double M_PI = 3.14159;
 
 struct Station {
     struct coordinates {
