@@ -103,7 +103,8 @@ double Route::get_distance(Station::coordinates a, Station::coordinates b) {
     lon2r = deg2rad(b.second);
     u = sin((lat2r - lat1r) / 2);
     v = sin((lon2r - lon1r) / 2);
-    return 2.0 * 6371.0 * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
+    const double EARTH_RADIUS = 6371.0;
+    return 2.0 * EARTH_RADIUS * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
 }
 
 void Route::get_length() {

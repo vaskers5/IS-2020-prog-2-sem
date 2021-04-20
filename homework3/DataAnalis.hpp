@@ -28,11 +28,12 @@ struct Station {
 };
 
 class Route {
-    std::string vecType_;
-    std::string route_;
     std::vector<Station *> stops_;
+    std::string vecType_;
     double length_;
     size_t sz;
+    std::string route_;
+
 public:
     Route(std::string route, std::string vecType, std::vector<Station> &data,
           std::map<std::string, size_t> &stopsPerLocation);
