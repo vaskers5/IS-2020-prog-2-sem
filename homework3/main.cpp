@@ -2,7 +2,7 @@
 #include "DataAnalis.hpp"
 #include "pugixml/pugixml.hpp"
 #include <windows.h>
-
+#include <cmath>
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
