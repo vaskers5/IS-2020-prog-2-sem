@@ -99,7 +99,7 @@ Route::Route(std::string route, std::string vecType, std::vector<Station> &data,
         get_length();
     }
 }
-
+//todo 180 strange const
 double Route::deg2rad(double deg) {
     return (deg * M_PI / 180);
 }
@@ -113,6 +113,7 @@ double Route::get_distance(Station::coordinates a, Station::coordinates b) {
     lon2r = deg2rad(get_second(b));
     u = sin((lat2r - lat1r) / 2);
     v = sin((lon2r - lon1r) / 2);
+    //todo const not here
     const double EARTH_RADIUS = 6371.0;
     return 2.0 * EARTH_RADIUS * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
 }
