@@ -1,0 +1,98 @@
+Pulling https://github.com/vaskers5/IS-2020-prog-2-sem/homework3
+Pull finished
+It's compiled
+Longest rides:
+    Автобуc: №487 length: 79.0637
+    Трамвай: №55 length: 15.7925
+    Троллейбус: №35 length: 17.7069
+Rides with max stops count
+    Автобуc: №211 stops count: 123
+    Трамвай: №23 stops count: 59
+    Троллейбус: №35 stops count: 65
+Street with max stops count:
+    Таллинское ш. stops count: 429
+
+In file included from DataAnalis.cpp:1:
+DataAnalis.hpp: In constructor 'Route::Route()':
+DataAnalis.hpp:37:17: warning: 'Route::route_' will be initialized after [-Wreorder]
+   37 |     std::string route_;
+      |                 ^~~~~~
+DataAnalis.hpp:36:12: warning:   'size_t Route::sz' [-Wreorder]
+   36 |     size_t sz;
+      |            ^~
+DataAnalis.hpp:43:5: warning:   when initialized here [-Wreorder]
+   43 |     Route() : vecType_("NULL"), route_("NULL"), sz(0), length_(0) {}
+      |     ^~~~~
+DataAnalis.hpp:36:12: warning: 'Route::sz' will be initialized after [-Wreorder]
+   36 |     size_t sz;
+      |            ^~
+DataAnalis.hpp:35:12: warning:   'double Route::length_' [-Wreorder]
+   35 |     double length_;
+      |            ^~~~~~~
+DataAnalis.hpp:43:5: warning:   when initialized here [-Wreorder]
+   43 |     Route() : vecType_("NULL"), route_("NULL"), sz(0), length_(0) {}
+      |     ^~~~~
+DataAnalis.cpp: In constructor 'XmlReader::XmlReader(const string&)':
+DataAnalis.cpp:43:28: warning: variable 'result' set but not used [-Wunused-but-set-variable]
+   43 |     pugi::xml_parse_result result = doc.load_file(file_name.c_str());
+      |                            ^~~~~~
+In file included from DataAnalis.cpp:1:
+DataAnalis.hpp: In constructor 'Route::Route(std::string, std::string, std::vector<Station>&, std::map<std::__cxx11::basic_string<char>, unsigned int>&)':
+DataAnalis.hpp:37:17: warning: 'Route::route_' will be initialized after [-Wreorder]
+   37 |     std::string route_;
+      |                 ^~~~~~
+DataAnalis.hpp:34:17: warning:   'std::string Route::vecType_' [-Wreorder]
+   34 |     std::string vecType_;
+      |                 ^~~~~~~~
+DataAnalis.cpp:83:1: warning:   when initialized here [-Wreorder]
+   83 | Route::Route(std::string route, std::string vecType, std::vector<Station> &data,
+      | ^~~~~
+In file included from DataAnalis.cpp:1:
+DataAnalis.hpp:36:12: warning: 'Route::sz' will be initialized after [-Wreorder]
+   36 |     size_t sz;
+      |            ^~
+DataAnalis.hpp:35:12: warning:   'double Route::length_' [-Wreorder]
+   35 |     double length_;
+      |            ^~~~~~~
+DataAnalis.cpp:83:1: warning:   when initialized here [-Wreorder]
+   83 | Route::Route(std::string route, std::string vecType, std::vector<Station> &data,
+      | ^~~~~
+DataAnalis.cpp: In member function 'void Route::get_length()':
+DataAnalis.cpp:122:23: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<Station*>::size_type' {aka 'unsigned int'} [-Wsign-compare]
+  122 |     for (int i = 0; i < stops_.size(); i++) {
+      |                     ~~^~~~~~~~~~~~~~~
+DataAnalis.cpp:123:27: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<Station*>::size_type' {aka 'unsigned int'} [-Wsign-compare]
+  123 |         for (int j = 0; j < stops_.size(); j++) {
+      |                         ~~^~~~~~~~~~~~~~~
+DataAnalis.cpp:134:23: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<Station*>::size_type' {aka 'unsigned int'} [-Wsign-compare]
+  134 |     for (int i = 0; i < stops_.size(); i++) {
+      |                     ~~^~~~~~~~~~~~~~~
+DataAnalis.cpp:137:27: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<Station*>::size_type' {aka 'unsigned int'} [-Wsign-compare]
+  137 |         for (int j = 0; j < stops_.size(); j++) {
+      |                         ~~^~~~~~~~~~~~~~~
+DataAnalis.cpp:145:27: warning: comparison of integer expressions of different signedness: 'int' and 'std::vector<Station*>::size_type' {aka 'unsigned int'} [-Wsign-compare]
+  145 |         for (int j = 0; j < stops_.size(); j++) {
+      |                         ~~^~~~~~~~~~~~~~~
+In file included from main.cpp:2:
+DataAnalis.hpp: In constructor 'Route::Route()':
+DataAnalis.hpp:37:17: warning: 'Route::route_' will be initialized after [-Wreorder]
+   37 |     std::string route_;
+      |                 ^~~~~~
+DataAnalis.hpp:36:12: warning:   'size_t Route::sz' [-Wreorder]
+   36 |     size_t sz;
+      |            ^~
+DataAnalis.hpp:43:5: warning:   when initialized here [-Wreorder]
+   43 |     Route() : vecType_("NULL"), route_("NULL"), sz(0), length_(0) {}
+      |     ^~~~~
+DataAnalis.hpp:36:12: warning: 'Route::sz' will be initialized after [-Wreorder]
+   36 |     size_t sz;
+      |            ^~
+DataAnalis.hpp:35:12: warning:   'double Route::length_' [-Wreorder]
+   35 |     double length_;
+      |            ^~~~~~~
+DataAnalis.hpp:43:5: warning:   when initialized here [-Wreorder]
+   43 |     Route() : vecType_("NULL"), route_("NULL"), sz(0), length_(0) {}
+      |     ^~~~~
+
+
+
