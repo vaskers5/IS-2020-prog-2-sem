@@ -12,7 +12,10 @@
 #include <iterator>
 #include <cmath>
 #include <windows.h>
-const double M_PI = 3.14159;
+
+//const double M_PI = 3.14159;
+const double grad = 180;
+const double EARTH_RADIUS = 6371.0;
 
 struct Station {
     struct coordinates {
@@ -30,11 +33,11 @@ struct Station {
 
 
 class Route {
-    std::vector<Station *> stops_;
     std::string vecType_;
-    double length_;
-    size_t sz;
     std::string route_;
+    size_t sz;
+    double length_;
+    std::vector<Station *> stops_;
 
 public:
     Route(std::string route, std::string vecType, std::vector<Station> &data,
