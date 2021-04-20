@@ -29,6 +29,16 @@ std::vector<std::string> &StringSplit::split(char delim, int rep) {
     return fields;
 }
 
+double get_first(Station::coordinates coord)  {
+    auto [first_coord,second_coord] = coord;
+    return first_coord;
+}
+
+double get_second(Station::coordinates coord) {
+    auto [first_coord,second_coord] = coord;
+    return second_coord;
+}
+
 XmlReader::XmlReader(const std::string &file_name) {
     pugi::xml_parse_result result = doc.load_file(file_name.c_str());
 }
@@ -97,10 +107,10 @@ double Route::deg2rad(double deg) {
 
 double Route::get_distance(Station::coordinates a, Station::coordinates b) {
     double lat1r, lon1r, lat2r, lon2r, u, v;
-    lat1r = deg2rad(a.first);
-    lon1r = deg2rad(a.second);
-    lat2r = deg2rad(b.first);
-    lon2r = deg2rad(b.second);
+    lat1r = deg2rad(get_first(a));
+    lon1r = deg2rad(get_second(a));
+    lat2r = deg2rad(get_first(b));
+    lon2r = deg2rad(get_second(b));
     u = sin((lat2r - lat1r) / 2);
     v = sin((lon2r - lon1r) / 2);
     const double EARTH_RADIUS = 6371.0;

@@ -11,6 +11,7 @@
 #include <vector>
 #include <iterator>
 #include <cmath>
+#include <windows.h>
 
 
 struct Station {
@@ -26,6 +27,7 @@ struct Station {
     std::vector<std::string> routes;
     coordinates coords;
 };
+
 
 class Route {
     std::vector<Station *> stops_;
