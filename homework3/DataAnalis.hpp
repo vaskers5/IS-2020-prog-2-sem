@@ -13,8 +13,7 @@
 #include <cmath>
 #include <windows.h>
 
-//const double M_PI = 3.14159;
-const double grad = 180;
+
 const double EARTH_RADIUS = 6371.0;
 
 struct Station {
@@ -33,17 +32,17 @@ struct Station {
 
 
 class Route {
-    std::string vecType_;
     std::string route_;
+    std::string vecType_;
     size_t sz;
     double length_;
     std::vector<Station *> stops_;
 
 public:
-    Route(std::string route, std::string vecType, std::vector<Station> &data,
+    Route(std::string vecType, std::string route,  std::vector<Station> &data,
           std::map<std::string, size_t> &stopsPerLocation);
 
-    Route() : vecType_("NULL"), route_("NULL"), sz(0), length_(0) {}
+    Route() : route_("NULL"),vecType_("NULL"),  sz(0), length_(0) {}
 
     double getLength() const { return length_; }
 

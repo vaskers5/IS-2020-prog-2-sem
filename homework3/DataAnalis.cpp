@@ -1,6 +1,9 @@
 #include "DataAnalis.hpp"
 #include <iostream>
 
+const double grad = 180;
+const double PI = 3.14159;
+
 class StringSplit : public std::string {
     std::vector<std::string> fields;
 public:
@@ -40,7 +43,8 @@ double get_second(Station::coordinates coord) {
 }
 
 XmlReader::XmlReader(const std::string &file_name) {
-    pugi::xml_parse_result result = doc.load_file(file_name.c_str());
+//    pugi::xml_parse_result result =
+    doc.load_file(file_name.c_str());
 }
 
 void XmlReader::read() {
@@ -80,6 +84,25 @@ std::vector<Station> XmlReader::get_vector_Stations() const {
     return stations;
 }
 
+
+//fixed 180 strange const
+double Route::deg2rad(double deg) {
+    return (deg * PI / grad);
+}
+
+
+double Route::get_distance(Station::coordinates a, Station::coordinates b) {
+    double lat1r, lon1r, lat2r, lon2r, u, v;
+    lat1r = deg2rad(get_first(a));
+    lon1r = deg2rad(get_second(a));
+    lat2r = deg2rad(get_first(b));
+    lon2r = deg2rad(get_second(b));
+    u = sin((lat2r - lat1r) / 2);
+    v = sin((lon2r - lon1r) / 2);
+    //fixed const not here
+    return 2.0 * EARTH_RADIUS * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
+}
+
 Route::Route(std::string route, std::string vecType, std::vector<Station> &data,
              std::map<std::string, size_t> &stopsPerLocation) : route_(std::move(route)), vecType_(std::move(vecType)),
                                                                 sz(0), length_(0) {
@@ -99,28 +122,11 @@ Route::Route(std::string route, std::string vecType, std::vector<Station> &data,
         get_length();
     }
 }
-//fuxed 180 strange const
-double Route::deg2rad(double deg) {
-    return (deg * M_PI / grad);
-}
-
-
-double Route::get_distance(Station::coordinates a, Station::coordinates b) {
-    double lat1r, lon1r, lat2r, lon2r, u, v;
-    lat1r = deg2rad(get_first(a));
-    lon1r = deg2rad(get_second(a));
-    lat2r = deg2rad(get_first(b));
-    lon2r = deg2rad(get_second(b));
-    u = sin((lat2r - lat1r) / 2);
-    v = sin((lon2r - lon1r) / 2);
-    //fixed const not here
-    return 2.0 * EARTH_RADIUS * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
-}
 
 void Route::get_length() {
     std::vector<std::vector<double>> stops(stops_.size(), std::vector<double>(stops_.size()));
-    for (int i = 0; i < stops_.size(); i++) {
-        for (int j = 0; j < stops_.size(); j++) {
+    for (long long unsigned int i = 0; i < stops_.size(); i++) {
+        for (long long unsigned int j = 0; j < stops_.size(); j++) {
             stops.at(i).at(j) = get_distance(stops_.at(i)->coords, stops_.at(j)->coords);
         }
     }
@@ -131,10 +137,10 @@ void Route::get_length() {
 
     dist.at(0) = 0;
 
-    for (int i = 0; i < stops_.size(); i++) {
+    for (long long unsigned int i = 0; i < stops_.size(); i++) {
         double min = std::numeric_limits<double>::max();
         int minpos = 0;
-        for (int j = 0; j < stops_.size(); j++) {
+        for (long long unsigned int j = 0; j < stops_.size(); j++) {
             if (!visited.at(j) && dist.at(j) < min) {
                 min = dist.at(j);
                 minpos = j;
@@ -142,12 +148,13 @@ void Route::get_length() {
         }
         res += min;
         visited.at(minpos) = true;
-        for (int j = 0; j < stops_.size(); j++) {
+        for (long long unsigned int j = 0; j < stops_.size(); j++) {
             dist.at(j) = std::min(dist.at(j), stops.at(minpos).at(j));
         }
         this->length_ = res;
     }
 }
+
 
 CityTransport::CityTransport(const std::vector<Station> &dat) {
     data = dat;
