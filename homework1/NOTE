@@ -1,0 +1,44 @@
+Pulling https://github.com/vaskers5/IS-2020-prog-2-sem/homework1
+Pull finished
+It's compiled
+It's OK
+geometry.cpp: In member function 'double Trapezoid::height() const':
+geometry.cpp:163:9: warning: unused variable 'height' [-Wunused-variable]
+  163 |  double height = 0;
+      |         ^~~~~~
+geometry.cpp:164:9: warning: unused variable 'sum' [-Wunused-variable]
+  164 |  double sum = 0.0;
+      |         ^~~
+main.cpp: In function 'void PolygonsCheck()':
+main.cpp:43:11: warning: implicitly-declared 'Trapezoid& Trapezoid::operator=(const Trapezoid&)' is deprecated [-Wdeprecated-copy]
+   43 |     tra = tr;
+      |           ^~
+In file included from main.cpp:1:
+geometry.h:98:2: note: because 'Trapezoid' has user-provided 'Trapezoid::Trapezoid(const Trapezoid&)'
+   98 |  Trapezoid(const Trapezoid& chain);
+      |  ^~~~~~~~~
+geometry.h: In member function 'Trapezoid& Trapezoid::operator=(const Trapezoid&)':
+geometry.h:93:7: warning: implicitly-declared 'Polygon& Polygon::operator=(const Polygon&)' is deprecated [-Wdeprecated-copy]
+   93 | class Trapezoid : public Polygon
+      |       ^~~~~~~~~
+geometry.h:78:2: note: because 'Polygon' has user-provided 'Polygon::Polygon(const Polygon&)'
+   78 |  Polygon(const Polygon& chain);
+      |  ^~~~~~~
+geometry.h: In member function 'Polygon& Polygon::operator=(const Polygon&)':
+geometry.h:73:7: warning: implicitly-declared 'ClosedPolygonalChain& ClosedPolygonalChain::operator=(const ClosedPolygonalChain&)' is deprecated [-Wdeprecated-copy]
+   73 | class Polygon : public ClosedPolygonalChain
+      |       ^~~~~~~
+geometry.h:68:2: note: because 'ClosedPolygonalChain' has user-provided 'ClosedPolygonalChain::ClosedPolygonalChain(const ClosedPolygonalChain&)'
+   68 |  ClosedPolygonalChain(const ClosedPolygonalChain& chain);
+      |  ^~~~~~~~~~~~~~~~~~~~
+geometry.h: In member function 'Trapezoid& Trapezoid::operator=(const Trapezoid&)':
+geometry.h:93:7: note: synthesized method 'Polygon& Polygon::operator=(const Polygon&)' first required here
+   93 | class Trapezoid : public Polygon
+      |       ^~~~~~~~~
+main.cpp: In function 'void PolygonsCheck()':
+main.cpp:43:11: note: synthesized method 'Trapezoid& Trapezoid::operator=(const Trapezoid&)' first required here
+   43 |     tra = tr;
+      |           ^~
+
+
+

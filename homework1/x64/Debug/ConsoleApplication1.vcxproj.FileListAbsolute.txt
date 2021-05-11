@@ -1,0 +1,4 @@
+C:\Users\79514\Desktop\С++\1\lab_13\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
+C:\Users\79514\Desktop\С++\1\lab_13\ConsoleApplication1\x64\Debug\ConsoleApplication1.pdb
+C:\Users\79514\Desktop\IS-2020-prog-2-sem\IS-2020-prog-2-sem\homework1\x64\Debug\ConsoleApplication1.exe
+C:\Users\79514\Desktop\IS-2020-prog-2-sem\IS-2020-prog-2-sem\homework1\x64\Debug\ConsoleApplication1.pdb

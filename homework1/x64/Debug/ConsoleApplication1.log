@@ -1,0 +1,5 @@
+﻿  Geometry.cpp
+C:\Users\79514\Desktop\IS-2020-prog-2-sem\IS-2020-prog-2-sem\homework1\Geometry.cpp(69,32): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\79514\Desktop\IS-2020-prog-2-sem\IS-2020-prog-2-sem\homework1\Geometry.cpp(85,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Users\79514\Desktop\IS-2020-prog-2-sem\IS-2020-prog-2-sem\homework1\Geometry.cpp(118,9): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  ConsoleApplication1.vcxproj -> C:\Users\79514\Desktop\IS-2020-prog-2-sem\IS-2020-prog-2-sem\homework1\x64\Debug\ConsoleApplication1.exe
