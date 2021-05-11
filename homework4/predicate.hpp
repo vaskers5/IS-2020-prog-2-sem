@@ -102,11 +102,11 @@ T1 findBackward(const T1 &begin, const T1 &end, T2 elem) {
 
 template<typename T1, typename Function = std::less<>>
 bool isPalindrome(const T1 &begin, const T1 &end, Function func = Function()) {
-    vector<int> data;
+    vector<T1> data;
     for (T1 it = begin; it != end; it++)
-        data.push_back(*it);
+        data.push_back(it);
     for (size_t i = 0; i < data.size() / 2; i++) {
-        if (!func(data[i], data[data.size() - i - 1]))
+        if (!func(*data[i], *data[data.size() - i - 1]))
             return false;
     }
     return true;
