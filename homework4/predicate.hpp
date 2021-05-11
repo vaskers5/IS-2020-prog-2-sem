@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//todo T1 and T2 are bad names
 template<typename T1, typename Function>
 bool allOf(const T1 &begin, const T1 &end, Function func) {
     for (T1 it = begin;
