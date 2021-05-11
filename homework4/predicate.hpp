@@ -7,9 +7,10 @@
 
 using namespace std;
 
-template<typename T1, typename Function>
-bool allOf(const T1 &begin, const T1 &end, Function func) {
-    for (T1 it = begin;
+//fixed bad names
+template<typename Iterator, typename Function>
+bool allOf(const Iterator &begin, const Iterator &end, Function func) {
+    for (Iterator it = begin;
          it != end; ++it) {
         if (!func(*it)) {
             return false;
@@ -19,9 +20,9 @@ bool allOf(const T1 &begin, const T1 &end, Function func) {
 }
 
 
-template<typename T1, typename Function>
-bool anyOf(const T1 &begin, const T1 &end, Function func) {
-    for (T1 it = begin; it != end; ++it) {
+template<typename Iterator, typename Function>
+bool anyOf(const Iterator &begin, const Iterator &end, Function func) {
+    for (Iterator it = begin; it != end; ++it) {
         if (func(*it)) {
             return true;
         }
@@ -30,9 +31,9 @@ bool anyOf(const T1 &begin, const T1 &end, Function func) {
 }
 
 
-template<typename T1, typename Function>
-bool noneOf(const T1 &begin, const T1 &end, Function func) {
-    for (T1 it = begin; it != end; ++it) {
+template<typename Iterator, typename Function>
+bool noneOf(const Iterator &begin, const Iterator &end, Function func) {
+    for (Iterator it = begin; it != end; ++it) {
         if (func(*it)) {
             return false;
         }
@@ -40,10 +41,10 @@ bool noneOf(const T1 &begin, const T1 &end, Function func) {
     return true;
 }
 
-template<typename T1, typename Function>
-bool oneOf(const T1 &begin, const T1 &end, Function func) {
+template<typename Iterator, typename Function>
+bool oneOf(const Iterator &begin, const Iterator &end, Function func) {
     int count = 0;
-    for (T1 it = begin; it != end; ++it) {
+    for (Iterator it = begin; it != end; ++it) {
         if (func(*it)) {
             ++count;
         }
@@ -51,9 +52,9 @@ bool oneOf(const T1 &begin, const T1 &end, Function func) {
     return count == 1;
 }
 
-template<typename T1, typename Function = std::less<>>
-bool isSorted(const T1 &begin, const T1 &end, Function func = Function()) {
-    for (T1 it = begin; it < end - 1; ++it) {
+template<typename Iterator, typename Function = std::less<>>
+bool isSorted(const Iterator &begin, const Iterator &end, Function func = Function()) {
+    for (Iterator it = begin; it < end - 1; ++it) {
         if (!func(*it, *(it + 1))) {
             return false;
         }
@@ -62,8 +63,8 @@ bool isSorted(const T1 &begin, const T1 &end, Function func = Function()) {
 }
 
 
-template<typename T1, typename Function = std::less<>>
-bool isPartitioned(T1 first, T1 last, Function func = Function()) {
+template<typename Iterator, typename Function = std::less<>>
+bool isPartitioned(Iterator first, Iterator last, Function func = Function()) {
     while (first != last) {
         if (!func(*first))
             break;
@@ -76,9 +77,9 @@ bool isPartitioned(T1 first, T1 last, Function func = Function()) {
     return true;
 }
 
-template<typename T1, typename T2>
-T1 findNot(const T1 &begin, const T1 &end, T2 elem) {
-    for (T1 it = begin; it != end; ++it) {
+template<typename Iterator, typename Element>
+Iterator findNot(const Iterator &begin, const Iterator &end, Element elem) {
+    for (Iterator it = begin; it != end; ++it) {
         if (*it != elem) {
             return it;
         }
@@ -86,10 +87,10 @@ T1 findNot(const T1 &begin, const T1 &end, T2 elem) {
     return end;
 }
 
-template<typename T1, typename T2>
-T1 findBackward(const T1 &begin, const T1 &end, T2 elem) {
-    stack<T1> q;
-    for (T1 it = begin; it != end; it++)
+template<typename Iterator, typename Element>
+Iterator findBackward(const Iterator &begin, const Iterator &end, Element elem) {
+    stack<Iterator> q;
+    for (Iterator it = begin; it != end; it++)
         q.push(it);
 
     while (!q.empty()) {
@@ -100,10 +101,10 @@ T1 findBackward(const T1 &begin, const T1 &end, T2 elem) {
     return end;
 }
 
-template<typename T1, typename Function = std::less<>>
-bool isPalindrome(const T1 &begin, const T1 &end, Function func = Function()) {
-    vector<T1> data;
-    for (T1 it = begin; it != end; it++)
+template<typename Iterator, typename Function = std::less<>>
+bool isPalindrome(const Iterator &begin, const Iterator &end, Function func = Function()) {
+    vector <Iterator> data;
+    for (Iterator it = begin; it != end; it++)
         data.push_back(it);
     for (size_t i = 0; i < data.size() / 2; i++) {
         if (!func(*data[i], *data[data.size() - i - 1]))
