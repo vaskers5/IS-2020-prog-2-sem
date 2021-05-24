@@ -80,6 +80,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/CircularBuffer.cpp">
+			<Option target="homework5"/>
+		</Unit>
+		<Unit filename="C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/CircularBuffer.hpp">
+			<Option target="homework5"/>
+		</Unit>
 		<Unit filename="C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/main.cpp">
 			<Option target="homework5"/>
 		</Unit>

@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/CircularBuffer.cpp" "C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/cmake-build-debug/CMakeFiles/homework5.dir/CircularBuffer.cpp.obj"
   "C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/main.cpp" "C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/cmake-build-debug/CMakeFiles/homework5.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

@@ -142,6 +142,33 @@ homework5/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\homework5.dir\build.make CMakeFiles/homework5.dir/build
 .PHONY : homework5/fast
 
+CircularBuffer.obj: CircularBuffer.cpp.obj
+
+.PHONY : CircularBuffer.obj
+
+# target to build an object file
+CircularBuffer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\homework5.dir\build.make CMakeFiles/homework5.dir/CircularBuffer.cpp.obj
+.PHONY : CircularBuffer.cpp.obj
+
+CircularBuffer.i: CircularBuffer.cpp.i
+
+.PHONY : CircularBuffer.i
+
+# target to preprocess a source file
+CircularBuffer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\homework5.dir\build.make CMakeFiles/homework5.dir/CircularBuffer.cpp.i
+.PHONY : CircularBuffer.cpp.i
+
+CircularBuffer.s: CircularBuffer.cpp.s
+
+.PHONY : CircularBuffer.s
+
+# target to generate assembly for a file
+CircularBuffer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\homework5.dir\build.make CMakeFiles/homework5.dir/CircularBuffer.cpp.s
+.PHONY : CircularBuffer.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -178,6 +205,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... homework5
+	@echo ... CircularBuffer.obj
+	@echo ... CircularBuffer.i
+	@echo ... CircularBuffer.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
