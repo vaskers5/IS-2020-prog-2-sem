@@ -41,20 +41,16 @@ emptyClass cerr;
 #endif
 
 #ifdef DEBUG                                                                                     //check vector range in debug
-
-template<class T>
-struct vector1 : public vector<T> {
+template <class T>
+struct vector1 : public vector<T>{
     using vector<T>::vector;
-
     decltype(auto) operator[](size_t t) {
         return (*this).at(t);
     }
-
-    decltype(auto) operator[](size_t t) const {
+    decltype(auto) operator[](size_t t)  const {
         return (*this).at(t);
     }
 };
-
 #define vector vector1
 #endif
 
@@ -62,12 +58,12 @@ int depth = 0;
 int maxDepth = 0;
 
 
-ostream &operator<<(ostream &out, const CircularBuffer<int> &a) {
+ostream& operator<<(ostream& out, const CircularBuffer<int>& a){
     depth++;
     int myDepth = depth;
     maxDepth = max(maxDepth, depth);
-    for (auto iter = a.begin(); iter != a.end(); ++iter) {
-        if (iter != a.begin()) {
+    for (auto iter = a.begin(); iter != a.end(); ++iter){
+        if (iter != a.begin()){
             if (maxDepth - myDepth == 0)
                 out << " ";
             else
@@ -77,7 +73,7 @@ ostream &operator<<(ostream &out, const CircularBuffer<int> &a) {
         auto el = *iter;
         out << el;
     }
-    if (myDepth == 1) {
+    if (myDepth == 1){
         out << endl;
     }
     depth--;
@@ -87,37 +83,32 @@ ostream &operator<<(ostream &out, const CircularBuffer<int> &a) {
 }
 
 
-template<class Ch, class Tr, class... Args>
-//cout tuple
-auto &operator<<(std::basic_ostream<Ch, Tr> &os, std::tuple<Args...> const &t) {
+template<class Ch, class Tr, class... Args>                                                      //cout tuple
+auto& operator<<(std::basic_ostream<Ch, Tr>& os, std::tuple<Args...> const& t) {
     maxDepth = max(depth + 1, maxDepth);
-    std::apply([&os](auto &&... args) { ((os << args << " "), ...); }, t);
+    std::apply([&os](auto&&... args) {((os << args << " "), ...);}, t);
     return os;
 }
 
-template<class T, class U>
-//cout pair
-ostream &operator<<(ostream &out, const pair<T, U> &p) {
+template<class T, class U>                                                                       //cout pair
+ostream& operator<<(ostream& out, const pair<T, U>& p){
     maxDepth = max(depth + 1, maxDepth);
     return (out << p.first << " " << p.second);
 }
 
-template<class T>
-//cin vector (any dimension)
-istream &operator>>(istream &in, vector<T> &v) {
-    for (auto &e : v) {
+template<class T>                                                                                //cin vector (any dimension)
+istream& operator>>(istream& in, vector<T>& v){
+    for (auto& e : v){
         in >> e;
     }
     return in;
 }
 
 template<class T>                                                                                //two-dimensional array for more comfortable constructor
-struct matrix : public vector<vector<T>> {
+struct matrix : public vector<vector<T>>{
     using vector<vector<T>>::vector;
-
-    matrix(size_t n = 0, size_t m = 0, T el = T()) : vector<vector<T>>(n, vector<T>(m, el)) {};
-
-    void resize(size_t n, size_t m, T el = T()) {
+    matrix (size_t n = 0, size_t m = 0, T el = T()) : vector<vector<T>>(n, vector<T>(m, el)){};
+    void resize(size_t n, size_t m, T el = T()){
         vector<vector<T>>::resize(n, vector<T>(m, el));
     }
 };
@@ -125,16 +116,15 @@ struct matrix : public vector<vector<T>> {
 stringstream ss;
 
 
-template<auto &out = cout, typename T>
-//function that prints any values with space delimeter
-void
-print(const T &t)                                                                           //and make endl in the end (but it doesn't even matter)
+template <auto& out=cout, typename T>                                                         //function that prints any values with space delimeter
+void print(const T& t)                                                                           //and make endl in the end (but it doesn't even matter)
 {                                                                                                //e.g print(1, "plus", 2, '=', 3);
     out << t << endl;                                                                            //1 plus 2 = 3
 }                                                                                                //use template for another ostream
 //e.g. print<cerr>("I am here")
-template<auto &out = cout, class T, class... Args>
-void print(const T &el, Args... args) {
+template<auto& out=cout, class T, class... Args>
+void print(const T& el, Args... args)
+{
     out << el << " ";
     print<out>(args...);
 }
@@ -142,7 +132,7 @@ void print(const T &el, Args... args) {
 #define callAssert(...) assert(assertPrint(__VA_ARGS__))
 
 template<class P, class... Args>
-bool assertPrint(const P &pred, Args &&... args) {
+bool assertPrint(const P& pred, Args&&... args) {
     if (!pred(forward<Args>(args)...)) {
         print<cerr>(forward<Args>(args)...);
         return false;
@@ -150,34 +140,33 @@ bool assertPrint(const P &pred, Args &&... args) {
     return true;
 }
 
-void checkConstOperator(const CircularBuffer<int> &cb) {
-    print(cb[2]);
+void checkConstOperator(const CircularBuffer<int>& cb) {
+	print(cb[2]);
 }
 
 
-int main() {
+int main(){
     cin.tie(NULL);
     ios_base::sync_with_stdio(false);
     CircularBuffer<int> c(4);
     c.addFirst(1);
     callAssert(equal_to<>(), c.first(), 1);
-//    std::cout <<c.first() <<  " " << c.last();
-//    callAssert(equal_to<>(), c.last(), 1);
+    callAssert(equal_to<>(), c.last(), 1);
     c.addLast(2);
     callAssert(equal_to<>(), c.first(), 1);
-//    callAssert(equal_to<>(), c.last(), 2);
+    callAssert(equal_to<>(), c.last(), 2);
     callAssert(equal_to<>(), c[0], 1);
     callAssert(equal_to<>(), c[1], 2);
     c.delFirst();
     callAssert(equal_to<>(), c[0], 2);
     callAssert(equal_to<>(), c.first(), 2);
-//    callAssert(equal_to<>(), c.last(), 2);
+    callAssert(equal_to<>(), c.last(), 2);
     c.delLast();
     try {
         c[0] = 1;
         throw "out of range";
     }
-    catch (const exception &e) {
+    catch (const exception& e) {
         print(e.what());
     }
     c.addFirst(1);
@@ -185,11 +174,11 @@ int main() {
     c.addFirst(3);
     c.addFirst(4);
     checkConstOperator(c);
-    try {
+	try {
         c[4] = 1;
         throw "out of range";
     }
-    catch (const exception &e) {
+    catch (const exception& e) {
         print(e.what());
     }
     print<ss>(c);
@@ -199,7 +188,7 @@ int main() {
     print<ss>(c);
     c.addFirst(6);
     print<ss>(c);
-    sort(c.begin(), c.end());
+	sort(c.begin(), c.end());
     print<ss>(c);
     callAssert(equal_to<>(), ss.str(), "4 3 2 1\n"
                                        "\n"

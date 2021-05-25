@@ -9,6 +9,7 @@
 template<class T = unsigned>
 class CircularBuffer {
 //    T *m_first, *m_last, *m_cur_first, *m_cur_last;
+    //todo capital letters are for consts
     int CAPACITY;
     int SIZE;
     int index_to_new_elem;
@@ -134,12 +135,13 @@ public:
 //        this->m_cur_first = &data[0];
 //        this->m_cur_last= &data[CAPACITY - 1];
     }
-
+    //todo delete buffer
     ~CircularBuffer() {}
 
     std::size_t size() {
         return SIZE;
     }
+    //todo programming not physics
     const T &first() {
         if (SIZE == 0) {
             throw std::out_of_range("https://otvet.mail.ru/question/40252019");
@@ -154,7 +156,7 @@ public:
         return data[SIZE - 1];
     }
 
-
+    //todo more information in exception
     T &operator[](int index) const {
         if (index < 0 || index > SIZE - 1 || SIZE == 0) {
             throw (std::out_of_range("out of range"));
@@ -175,7 +177,7 @@ public:
         CAPACITY = newCapacity;
         index_to_new_elem = SIZE;
     }
-
+    //todo all functions O(1)
     void addLast(T x) {
         if (index_to_new_elem >= CAPACITY) {
             index_to_new_elem = 0;
