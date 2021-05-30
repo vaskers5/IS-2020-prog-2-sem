@@ -32,56 +32,56 @@ public:
 
         Iter(const Iter &other) : iterator(other.iterator) {}
 
-         Iter &operator+=(difference_type it) {
+        Iter &operator+=(difference_type it) {
             iterator += it;
             return *this;
         }
 
-         Iter &operator-=(difference_type it) {
+        Iter &operator-=(difference_type it) {
             iterator -= it;
             return *this;
         }
 
-         T &operator*() const {
+        T &operator*() const {
             return *iterator;
         }
 
-         T *operator->() const {
+        T *operator->() const {
             return iterator;
         }
 
 
-         Iter &operator++() {
+        Iter &operator++() {
             ++iterator;
             return *this;
         }
 
-         Iter &operator--() {
+        Iter &operator--() {
             --iterator;
             return *this;
         }
 
-         Iter operator++(T) const {
+        Iter operator++(T) const {
             Iter tmp(*this);
             ++iterator;
             return tmp;
         }
 
-         Iter operator--(T) const {
+        Iter operator--(T) const {
             Iter tmp(*this);
             --iterator;
             return tmp;
         }
 
-         difference_type operator-(const Iter &it) const {
+        difference_type operator-(const Iter &it) const {
             return iterator - it.iterator;
         }
 
-         Iter operator+(difference_type it) const {
+        Iter operator+(difference_type it) const {
             return Iter(iterator + it);
         }
 
-         Iter operator-(difference_type it) const {
+        Iter operator-(difference_type it) const {
             return Iter(iterator - it);
         }
 
@@ -93,27 +93,27 @@ public:
             return Iter(lhs - rhs.iterator);
         }
 
-         bool operator==(const Iter &other) const {
+        bool operator==(const Iter &other) const {
             return iterator == other.iterator;
         }
 
-         bool operator!=(const Iter &other) const {
+        bool operator!=(const Iter &other) const {
             return iterator != other.iterator;
         }
 
-         bool operator>(const Iter &other) const {
+        bool operator>(const Iter &other) const {
             return iterator > other.iterator;
         }
 
-         bool operator<(const Iter &other) const {
+        bool operator<(const Iter &other) const {
             return iterator < other.iterator;
         }
 
-         bool operator>=(const Iter &other) const {
+        bool operator>=(const Iter &other) const {
             return iterator >= other.iterator;
         }
 
-         bool operator<=(const Iter &other) const {
+        bool operator<=(const Iter &other) const {
             return iterator <= other.iterator;
         }
     };
@@ -158,9 +158,9 @@ public:
 
     //todo more information in exception
     T &operator[](int index) const {
-        if (index < 0 || index > SIZE - 1 || SIZE == 0) {
-            throw (std::out_of_range("out of range"));
-        }
+//        if (index < 0 || index > SIZE - 1 || SIZE == 0) {
+//            throw (std::out_of_range("out of range"));
+//        }
         return data[index];
     }
 

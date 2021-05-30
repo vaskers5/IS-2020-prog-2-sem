@@ -6,12 +6,16 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/CircularBuffer.cpp
+CircularBuffer.hpp
+C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/CircularBuffer.hpp
+
 C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/CircularBuffer.hpp
 iostream
 -
-iterator
+algorithm
 -
-compare
+iterator
 -
 
 C:/Users/79514/Desktop/IS-2020-prog-2-sem/IS-2020-prog-2-sem/homework5/main.cpp
