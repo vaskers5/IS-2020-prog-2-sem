@@ -7,19 +7,27 @@
 
 template<class T>
 class CircularBuffer {
+
 private:
+
     int m_capacity = 0;
     int m_cur_size;
     T *data;
-    T *m_end, *m_begin, *m_cur_first, *m_cur_last; // m_end и m_begin указывают на первый последний и неизменимы
+    T *m_end, *m_begin, *m_cur_first, *m_cur_last;
+
 public:
-    // Итератор
-    class iter : public std::iterator<std::random_access_iterator_tag, T> {
+    class iter {
     private:
         int index;
         size_t m_capacity, m_cur_size;
         T *m_begin, *m_end, *m_cur_first, *m_cur_last;
     public:
+        using iterator_category = std::random_access_iterator_tag;
+        using difference_type = std::ptrdiff_t;
+        using value_type = T;
+        using pointer = value_type *;
+        using reference = value_type &;
+
 
         iter(int index, size_t capacity, size_t cur_size, T *begin, T *end, T *cur_first, T *cur_last) :
                 index(index), m_capacity(capacity), m_cur_size(cur_size), m_begin(begin), m_end(end),
@@ -30,69 +38,39 @@ public:
                                m_begin(it.m_begin),
                                m_end(it.m_end), m_cur_first(it.m_cur_first), m_cur_last(it.m_cur_last) {}
 
-//        iter &operator=(const iter &it) = default;
-
-        // maybe to do, but i don't give a fuck
         iter &operator+=(int x) {
             index += x;
-
-//            if (index > m_end)
-//                index = m_begin + std::distance(m_end, index) - 1;
 
             return *this;
         }
 
         iter &operator-=(int x) {
             index -= x;
-
-//            if (index < m_begin)
-//                index = m_end - std::distance(index, m_begin) + 1;
-
             return *this;
         }
 
         iter &operator++() {
-//            if (index < m_end)
-                index++;
-//            else {
-//                index = m_begin;
-//            }
+            index++;
             return *this;
         }
 
         iter &operator--() {
-//            if (index > m_begin)
-                index--;
-//            else
-//                index = m_end;
+            index--;
             return *this;
         }
 
 
         auto operator-(const iter &it) {
-//            if (index < it.index) {
-//                return std::distance(it.index, it.m_cur_last) +
-//                       std::distance(m_cur_first, index + 1);
-//            } else {
-                return (index - it.index);
-//            }
+            return (index - it.index);
         }
 
 
         iter operator+(int x) {
-            auto temp = index + x;
-            
-
             return iter(index + x, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
         }
 
         iter operator-(int x) {
-            auto temp = index - x;
-
-//            if (temp < m_begin)
-//                temp = index + x + m_capacity - 1;
-
-            return iter(temp, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+            return iter(index - x, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
         }
 
         T &operator*() const {
@@ -194,25 +172,16 @@ public:
         delete[] data;
     }
 
-    iter begin() const { // возвращает первый элемент
-//        if (m_cur_last + 1 > m_end)
-//            return iter(m_cur_first + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
-//        else
-//            return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+    iter begin() const {
         return iter(0, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
     }
 
-    iter end() const {// возвращает последний элемент
-//        if (m_cur_last + 1 > m_end)
-//            return iter(m_cur_last + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
-//        else
-//            return iter(m_cur_last, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+    iter end() const {
         return iter(m_cur_size, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
     }
-    // 5 4 3 2
-    // _ _ _ _ -> _ _ _ 1 -> _ _ 2 1 -> _ 3 2 1 -> 4 3 2 1 -> 4 3 2 5
 
-    void addFirst(const T &value) {// вставка элемента в начало
+
+    void addFirst(const T &value) {
         if (m_cur_size == 0) {
             *m_end = value;
             m_cur_last = m_end;
@@ -225,17 +194,11 @@ public:
         if (m_cur_size < m_capacity) {
             m_cur_size++;
         } else {
-//            data[m_capacity] = *m_cur_last;
             cyclic_dec(m_cur_last);
-
-//              auto temp = m_cur_last;
-//              *m_cur_last = data[m_capacity];
-//              m_cur_last++;
         }
     }
 
-// 4 3 2 1  -> _ 3 2 1 -> _ _ 2 1
-    void delFirst() { // удаление элемента с начала
+    void delFirst() {
         if (m_cur_size == 0) {
             throw std::out_of_range("size is zero");
         }
@@ -258,8 +221,7 @@ public:
         return *m_cur_first;
     }
 
-    // _ _ _ _ -> 1 _ _ _ -> 1 2 _ _ -> 1 2 3 _ -> 1 2 3 4 -> 5 2 3 4
-    void addLast(const T &value) { // вставка элемента в конец
+    void addLast(const T &value) {
         if (m_cur_last != m_end) {
             m_cur_last++;
             *m_cur_last = value;
@@ -271,10 +233,7 @@ public:
             m_cur_size++;
     }
 
-    // _ _ _ _ -> 1 _ _ _ -> 1 2 _ _ -> 1 2 3 _ -> 1 2 3 4 -> 5 2 3 4
-    // 1 2 3 4 - > 1 2 3
-    // 5 2 3 4 - > 2 3 4
-    void delLast() { // удаление элемента с конца
+    void delLast() {
         if (m_cur_size == 0) {
             throw std::out_of_range("size is zero");
         }
@@ -296,24 +255,24 @@ public:
         return *(m_cur_last);
     }
 
-    T operator[](int i) const { // возвращает i-ый член
+    T operator[](int i) const {
         if (m_cur_size != 0 and i < m_cur_size and i >= 0) {
             if (m_cur_first + i > m_end)
                 return *(m_cur_first + i - m_capacity);
             else
                 return *(m_cur_first + i);
         } else
-            throw std::out_of_range("size is zero");
+            throw std::out_of_range("wrong index");
     }
 
-    T &operator[](int i) { // возвращает i-ый член
+    T &operator[](int i) {
         if (m_cur_size != 0 and i < m_cur_size and i >= 0) {
             if (m_cur_first + i > m_end)
                 return *(m_cur_first + i - m_capacity);
             else
                 return *(m_cur_first + i);
         } else
-            throw std::out_of_range("size is zero");
+            throw std::out_of_range("wrong index");
     }
 
     void changeCapacity(const int &value) {
@@ -323,23 +282,6 @@ public:
         }
 
         *this = tmp;
-        /*
-        T *temp = new T[value];
-        int size = std::min(m_cur_size, value);
-        for (int i = 0; i < size; ++i)
-            temp[i] = *(m_cur_first - i);
-        m_capacity = value;
-
-//        delete[] data;
-        data = new T[m_capacity];
-        for (int i = 0; i < size; ++i)
-            data[i] = temp[i];
-        m_end = &data[m_capacity - 1];
-        m_begin = data;
-        m_cur_first = data + size;
-        m_cur_last = m_begin;
-        delete[] temp;
-         */
     }
 
     void cyclic_inc(T *&ptr) {
