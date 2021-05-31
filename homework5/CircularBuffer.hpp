@@ -53,8 +53,9 @@ public:
         iter &operator++() {
             if (p < m_end)
                 p++;
-            else
+            else{
                 p = m_begin;
+            }
             return *this;
         }
 
@@ -187,16 +188,19 @@ public:
     }
 
     iter begin() const { // возвращает первый элемент
-        return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
+        if (m_cur_last + 1 > m_end)
+            return iter(m_cur_first + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
+        else
+            return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
     }
 
     iter end() const {// возвращает последний элемент
-//        if (m_cur_last + 1 > m_end)
-//            return iter(m_begin, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
-//        else
-        auto temp = &data[m_capacity];
-        return iter(m_cur_last + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
+        if (m_cur_last + 1 > m_end)
+            return iter(m_cur_last + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
+        else
+            return iter(m_cur_last, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
     }
+    // 5 4 3 2
     // _ _ _ _ -> _ _ _ 1 -> _ _ 2 1 -> _ 3 2 1 -> 4 3 2 1 -> 4 3 2 5
 
     void addFirst(const T &value) {// вставка элемента в начало
@@ -211,8 +215,14 @@ public:
 
         if (m_cur_size < m_capacity) {
             m_cur_size++;
-        } else {
-            cyclic_dec(m_cur_last);
+        }
+        else {
+            data[m_capacity] = *m_cur_last;
+//            cyclic_dec(m_cur_last);
+
+//              auto temp = m_cur_last;
+//              *m_cur_last = data[m_capacity];
+//              m_cur_last++;
         }
     }
 
@@ -251,7 +261,6 @@ public:
         }
         if (m_cur_size != m_capacity)
             m_cur_size++;
-
     }
 
     // _ _ _ _ -> 1 _ _ _ -> 1 2 _ _ -> 1 2 3 _ -> 1 2 3 4 -> 5 2 3 4
