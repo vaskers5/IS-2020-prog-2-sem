@@ -18,7 +18,7 @@ public:
     private:
         T *p;
         size_t m_capacity, m_cur_size;
-        T *m_end, *m_begin, *m_cur_first, *m_cur_last;
+        T *m_begin, *m_end, *m_cur_first, *m_cur_last;
     public:
 
         iter(T *index, size_t capacity, size_t cur_size, T *begin, T *end, T *cur_first, T *cur_last) :
@@ -187,14 +187,15 @@ public:
     }
 
     iter begin() const { // возвращает первый элемент
-        return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+        return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
     }
 
     iter end() const {// возвращает последний элемент
 //        if (m_cur_last + 1 > m_end)
 //            return iter(m_begin, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
 //        else
-        return iter(m_cur_last, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+        auto temp = &data[m_capacity];
+        return iter(m_cur_last + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
     }
     // _ _ _ _ -> _ _ _ 1 -> _ _ 2 1 -> _ 3 2 1 -> 4 3 2 1 -> 4 3 2 5
 
