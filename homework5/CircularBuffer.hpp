@@ -16,120 +16,127 @@ public:
     // Итератор
     class iter : public std::iterator<std::random_access_iterator_tag, T> {
     private:
-        T *p;
+        int index;
         size_t m_capacity, m_cur_size;
         T *m_begin, *m_end, *m_cur_first, *m_cur_last;
     public:
 
-        iter(T *index, size_t capacity, size_t cur_size, T *begin, T *end, T *cur_first, T *cur_last) :
-                p(index), m_capacity(capacity), m_cur_size(cur_size), m_begin(begin), m_end(end),
+        iter(int index, size_t capacity, size_t cur_size, T *begin, T *end, T *cur_first, T *cur_last) :
+                index(index), m_capacity(capacity), m_cur_size(cur_size), m_begin(begin), m_end(end),
                 m_cur_first(cur_first), m_cur_last(cur_last) {}
 
 
-        iter(const iter &it) : p(it.p), m_capacity(it.m_capacity), m_cur_size(it.m_cur_size), m_begin(it.m_begin),
+        iter(const iter &it) : index(it.index), m_capacity(it.m_capacity), m_cur_size(it.m_cur_size),
+                               m_begin(it.m_begin),
                                m_end(it.m_end), m_cur_first(it.m_cur_first), m_cur_last(it.m_cur_last) {}
 
 //        iter &operator=(const iter &it) = default;
 
         // maybe to do, but i don't give a fuck
         iter &operator+=(int x) {
-            p += x;
+            index += x;
 
-            if (p > m_end)
-                p = m_begin + std::distance(m_end, p) - 1;
+//            if (index > m_end)
+//                index = m_begin + std::distance(m_end, index) - 1;
 
             return *this;
         }
 
         iter &operator-=(int x) {
-            p -= x;
+            index -= x;
 
-            if (p < m_begin)
-                p = m_end - std::distance(p, m_begin) + 1;
+//            if (index < m_begin)
+//                index = m_end - std::distance(index, m_begin) + 1;
 
             return *this;
         }
 
         iter &operator++() {
-            if (p < m_end)
-                p++;
-            else{
-                p = m_begin;
-            }
+//            if (index < m_end)
+                index++;
+//            else {
+//                index = m_begin;
+//            }
             return *this;
         }
 
         iter &operator--() {
-            if (p > m_begin)
-                p--;
-            else
-                p = m_end;
+//            if (index > m_begin)
+                index--;
+//            else
+//                index = m_end;
             return *this;
         }
 
 
         auto operator-(const iter &it) {
-            if (p < it.p) {
-                return std::distance(it.p, it.m_cur_last) +
-                       std::distance(m_cur_first, p + 1);
-            } else {
-                return (p - it.p);
-            }
+//            if (index < it.index) {
+//                return std::distance(it.index, it.m_cur_last) +
+//                       std::distance(m_cur_first, index + 1);
+//            } else {
+                return (index - it.index);
+//            }
         }
 
 
         iter operator+(int x) {
-            auto temp = p + x;
+            auto temp = index + x;
+            
 
-            if (temp > m_end)
-                temp = p + x - m_capacity + 1;
-
-            return iter(temp, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+            return iter(index + x, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
         }
 
         iter operator-(int x) {
-            auto temp = p - x;
+            auto temp = index - x;
 
-            if (temp < m_begin)
-                temp = p + x + m_capacity - 1;
+//            if (temp < m_begin)
+//                temp = index + x + m_capacity - 1;
 
             return iter(temp, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
         }
 
         T &operator*() const {
-            return *p;
+
+            if (m_cur_first + index > m_end)
+                return *(m_cur_first + index - m_capacity);
+            else
+                return *(m_cur_first + index);
         }
 
+
         T *operator->() const {
-            return p;
+            if (m_cur_first + index > m_end)
+                return (m_cur_first + index - m_capacity);
+            else
+                return (m_cur_first + index);
         }
 
         T &operator[](const int x) {
-            return p[x];
+            return *(*this + x);
         }
 
         bool operator==(const iter &x) const {
-            return x.p == this->p;
+            return x.index == this->index;
         }
 
         bool operator!=(const iter &x) const {
-            return x.p != this->p;
+            return x.index != this->index;
         }
 
         bool operator<(const iter &x) const {
-            return x.p < this->p;
+            return x.index < this->index;
         }
 
         bool operator>(const iter &x) const {
-            return x.p > this->p;
+            return x.index > this->index;
         }
 
         bool operator>=(const iter &x) const {
-            return x.p >= this->p;
+            return x.index >= this->index;
         }
 
         bool operator<=(const iter &x) const {
-            return x.p <= this->p;
+            return x.index <= this->index;
         }
     };
 
@@ -188,17 +195,19 @@ public:
     }
 
     iter begin() const { // возвращает первый элемент
-        if (m_cur_last + 1 > m_end)
-            return iter(m_cur_first + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
-        else
-            return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+//        if (m_cur_last + 1 > m_end)
+//            return iter(m_cur_first + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
+//        else
+//            return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+        return iter(0, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
     }
 
     iter end() const {// возвращает последний элемент
-        if (m_cur_last + 1 > m_end)
-            return iter(m_cur_last + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
-        else
-            return iter(m_cur_last, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+//        if (m_cur_last + 1 > m_end)
+//            return iter(m_cur_last + 1, m_capacity, m_cur_size, m_begin, m_end + 1, m_cur_first, m_cur_last);
+//        else
+//            return iter(m_cur_last, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+        return iter(m_cur_size, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
     }
     // 5 4 3 2
     // _ _ _ _ -> _ _ _ 1 -> _ _ 2 1 -> _ 3 2 1 -> 4 3 2 1 -> 4 3 2 5
@@ -215,10 +224,9 @@ public:
 
         if (m_cur_size < m_capacity) {
             m_cur_size++;
-        }
-        else {
-            data[m_capacity] = *m_cur_last;
-//            cyclic_dec(m_cur_last);
+        } else {
+//            data[m_capacity] = *m_cur_last;
+            cyclic_dec(m_cur_last);
 
 //              auto temp = m_cur_last;
 //              *m_cur_last = data[m_capacity];
