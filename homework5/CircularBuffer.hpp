@@ -5,243 +5,339 @@
 #include <algorithm>
 #include <iterator>
 
-
-template<class T = unsigned>
+template<class T>
 class CircularBuffer {
-//    T *m_first, *m_last, *m_cur_first, *m_cur_last;
-    //todo capital letters are for consts
-    int CAPACITY;
-    int SIZE;
-    int index_to_new_elem;
+private:
+    int m_capacity = 0;
+    int m_cur_size;
     T *data;
+    T *m_end, *m_begin, *m_cur_first, *m_cur_last; // m_end и m_begin указывают на первый последний и неизменимы
 public:
-
-    class Iter {
+    // Итератор
+    class iter : public std::iterator<std::random_access_iterator_tag, T> {
     private:
-        T *iterator;
+        T *p;
+        size_t m_capacity, m_cur_size;
+        T *m_end, *m_begin, *m_cur_first, *m_cur_last;
     public:
-        using iterator_category = std::random_access_iterator_tag;
-        using difference_type = std::ptrdiff_t;
-        using value_type = T;
-        using pointer = value_type *;
-        using reference = value_type &;
 
-        Iter() : iterator(nullptr) {}
+        iter(T *index, size_t capacity, size_t cur_size, T *begin, T *end, T *cur_first, T *cur_last) :
+                p(index), m_capacity(capacity), m_cur_size(cur_size), m_begin(begin), m_end(end),
+                m_cur_first(cur_first), m_cur_last(cur_last) {}
 
-        explicit Iter(T *it) : iterator(it) {}
 
-        Iter(const Iter &other) : iterator(other.iterator) {}
+        iter(const iter &it) : p(it.p), m_capacity(it.m_capacity), m_cur_size(it.m_cur_size), m_begin(it.m_begin),
+                               m_end(it.m_end), m_cur_first(it.m_cur_first), m_cur_last(it.m_cur_last) {}
 
-        Iter &operator+=(difference_type it) {
-            iterator += it;
+//        iter &operator=(const iter &it) = default;
+
+        // maybe to do, but i don't give a fuck
+        iter &operator+=(int x) {
+            p += x;
+
+            if (p > m_end)
+                p = m_begin + std::distance(m_end, p) - 1;
+
             return *this;
         }
 
-        Iter &operator-=(difference_type it) {
-            iterator -= it;
+        iter &operator-=(int x) {
+            p -= x;
+
+            if (p < m_begin)
+                p = m_end - std::distance(p, m_begin) + 1;
+
             return *this;
+        }
+
+        iter &operator++() {
+            if (p < m_end)
+                p++;
+            else
+                p = m_begin;
+            return *this;
+        }
+
+        iter &operator--() {
+            if (p > m_begin)
+                p--;
+            else
+                p = m_end;
+            return *this;
+        }
+
+
+        auto operator-(const iter &it) {
+            if (p < it.p) {
+                return std::distance(it.p, it.m_cur_last) +
+                       std::distance(m_cur_first, p + 1);
+            } else {
+                return (p - it.p);
+            }
+        }
+
+
+        iter operator+(int x) {
+            auto temp = p + x;
+
+            if (temp > m_end)
+                temp = p + x - m_capacity + 1;
+
+            return iter(temp, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+        }
+
+        iter operator-(int x) {
+            auto temp = p - x;
+
+            if (temp < m_begin)
+                temp = p + x + m_capacity - 1;
+
+            return iter(temp, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
         }
 
         T &operator*() const {
-            return *iterator;
+            return *p;
         }
 
         T *operator->() const {
-            return iterator;
+            return p;
         }
 
-
-        Iter &operator++() {
-            ++iterator;
-            return *this;
+        T &operator[](const int x) {
+            return p[x];
         }
 
-        Iter &operator--() {
-            --iterator;
-            return *this;
+        bool operator==(const iter &x) const {
+            return x.p == this->p;
         }
 
-        Iter operator++(T) const {
-            Iter tmp(*this);
-            ++iterator;
-            return tmp;
+        bool operator!=(const iter &x) const {
+            return x.p != this->p;
         }
 
-        Iter operator--(T) const {
-            Iter tmp(*this);
-            --iterator;
-            return tmp;
+        bool operator<(const iter &x) const {
+            return x.p < this->p;
         }
 
-        difference_type operator-(const Iter &it) const {
-            return iterator - it.iterator;
+        bool operator>(const iter &x) const {
+            return x.p > this->p;
         }
 
-        Iter operator+(difference_type it) const {
-            return Iter(iterator + it);
+        bool operator>=(const iter &x) const {
+            return x.p >= this->p;
         }
 
-        Iter operator-(difference_type it) const {
-            return Iter(iterator - it);
-        }
-
-        friend  Iter operator+(difference_type lhs, const Iter &rhs) {
-            return Iter(lhs + rhs.iterator);
-        }
-
-        friend  Iter operator-(difference_type lhs, const Iter &rhs) {
-            return Iter(lhs - rhs.iterator);
-        }
-
-        bool operator==(const Iter &other) const {
-            return iterator == other.iterator;
-        }
-
-        bool operator!=(const Iter &other) const {
-            return iterator != other.iterator;
-        }
-
-        bool operator>(const Iter &other) const {
-            return iterator > other.iterator;
-        }
-
-        bool operator<(const Iter &other) const {
-            return iterator < other.iterator;
-        }
-
-        bool operator>=(const Iter &other) const {
-            return iterator >= other.iterator;
-        }
-
-        bool operator<=(const Iter &other) const {
-            return iterator <= other.iterator;
+        bool operator<=(const iter &x) const {
+            return x.p <= this->p;
         }
     };
 
-    Iter begin() const {
-        return Iter(data);
+
+    CircularBuffer(int size_) {
+        m_capacity = size_;
+        data = new T[m_capacity + 1];
+        m_end = &data[m_capacity - 1];
+        m_begin = &data[0];
+        m_cur_first = &data[m_capacity - 1];
+        m_cur_last = &data[0];
+        m_cur_size = 0;
     }
 
-    Iter end() const {
-        return Iter(data + SIZE);
+    CircularBuffer() {
+        m_capacity = 0;
+        data = new T[0];
+        m_end = &data[0];
+        m_begin = &data[0];
+        m_cur_first = &data[0];
+        m_cur_last = &data[0];
+        m_cur_size = 0;
     }
 
-    CircularBuffer(int CAPACITY = 1) : CAPACITY(CAPACITY), SIZE(0), index_to_new_elem(0), data(new T[CAPACITY]) {
-        for (int i = 0; i < CAPACITY; ++i) {
-            data[i] = 0;
+    CircularBuffer(const CircularBuffer &buf) {
+        m_capacity = buf.m_capacity;
+        data = new T[m_capacity + 1];
+        for (int i = 0; i < m_capacity; i++)
+            data[i] = buf.data[i];
+
+        m_end = &data[m_capacity - 1];
+        m_begin = &data[0];
+        m_cur_first = data + buf.m_cur_first - buf.data;
+        m_cur_last = data + buf.m_cur_last - buf.data;
+        m_cur_size = buf.m_cur_size;
+    }
+
+    CircularBuffer &operator=(const CircularBuffer &buf) {
+        m_capacity = buf.m_capacity;
+        data = new T[m_capacity + 1];
+        for (int i = 0; i < m_capacity; i++)
+            data[i] = buf.data[i];
+
+        m_end = &data[m_capacity - 1];
+        m_begin = &data[0];
+        m_cur_first = data + (int) (buf.m_cur_first - buf.data);
+        m_cur_last = data + (int) (buf.m_cur_last - buf.data);
+        m_cur_size = buf.m_cur_size;
+
+        return *this;
+    }
+
+
+    ~CircularBuffer() {
+        delete[] data;
+    }
+
+    iter begin() const { // возвращает первый элемент
+        return iter(m_cur_first, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+    }
+
+    iter end() const {// возвращает последний элемент
+//        if (m_cur_last + 1 > m_end)
+//            return iter(m_begin, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+//        else
+        return iter(m_cur_last, m_capacity, m_cur_size, m_begin, m_end, m_cur_first, m_cur_last);
+    }
+    // _ _ _ _ -> _ _ _ 1 -> _ _ 2 1 -> _ 3 2 1 -> 4 3 2 1 -> 4 3 2 5
+
+    void addFirst(const T &value) {// вставка элемента в начало
+        if (m_cur_size == 0) {
+            *m_end = value;
+            m_cur_last = m_end;
+            m_cur_first = m_end;
+        } else {
+            cyclic_dec(m_cur_first);
+            *m_cur_first = value;
         }
-//        this->m_first = &data[0];
-//        this->m_last = &data[CAPACITY - 1];
-//        this->m_cur_first = &data[0];
-//        this->m_cur_last= &data[CAPACITY - 1];
-    }
-    //todo delete buffer
-    ~CircularBuffer() {}
 
-    std::size_t size() {
-        return SIZE;
+        if (m_cur_size < m_capacity) {
+            m_cur_size++;
+        } else {
+            cyclic_dec(m_cur_last);
+        }
     }
-    //todo programming not physics
+
+// 4 3 2 1  -> _ 3 2 1 -> _ _ 2 1
+    void delFirst() { // удаление элемента с начала
+        if (m_cur_size == 0) {
+            throw std::out_of_range("size is zero");
+        }
+        if (m_cur_size == 1) {
+            m_cur_first = m_end;
+            m_cur_last = m_begin;
+        } else {
+            if (m_cur_first + 1 > m_end)
+                m_cur_first = m_begin;
+            else
+                m_cur_first++;
+        }
+        --m_cur_size;
+    }
+
     const T &first() {
-        if (SIZE == 0) {
-            throw std::out_of_range("https://otvet.mail.ru/question/40252019");
+        if (m_cur_size == 0) {
+            throw std::out_of_range("size is zero");
         }
-        return data[0];
+        return *m_cur_first;
+    }
+
+    // _ _ _ _ -> 1 _ _ _ -> 1 2 _ _ -> 1 2 3 _ -> 1 2 3 4 -> 5 2 3 4
+    void addLast(const T &value) { // вставка элемента в конец
+        if (m_cur_last != m_end) {
+            m_cur_last++;
+            *m_cur_last = value;
+        } else {
+            m_cur_last = m_begin;
+            *m_cur_last = value;
+        }
+        if (m_cur_size != m_capacity)
+            m_cur_size++;
+
+    }
+
+    // _ _ _ _ -> 1 _ _ _ -> 1 2 _ _ -> 1 2 3 _ -> 1 2 3 4 -> 5 2 3 4
+    // 1 2 3 4 - > 1 2 3
+    // 5 2 3 4 - > 2 3 4
+    void delLast() { // удаление элемента с конца
+        if (m_cur_size == 0) {
+            throw std::out_of_range("size is zero");
+        }
+        if (m_cur_size == 1) {
+            m_cur_first = m_end;
+            m_cur_last = m_begin;
+
+        } else if (m_cur_last != m_begin) {
+            m_cur_last--;
+
+        }
+        --m_cur_size;
     }
 
     const T &last() {
-        if (SIZE == 0) {
-            throw std::out_of_range("https://otvet.mail.ru/question/40252019");
+        if (m_cur_size == 0) {
+            throw std::out_of_range("size is zero");
         }
-        return data[SIZE - 1];
+        return *(m_cur_last);
     }
 
-    //todo more information in exception
-    T &operator[](int index) const {
-//        if (index < 0 || index > SIZE - 1 || SIZE == 0) {
-//            throw (std::out_of_range("out of range"));
-//        }
-        return data[index];
+    T operator[](int i) const { // возвращает i-ый член
+        if (m_cur_size != 0 and i < m_cur_size and i >= 0) {
+            if (m_cur_first + i > m_end)
+                return *(m_cur_first + i - m_capacity);
+            else
+                return *(m_cur_first + i);
+        } else
+            throw std::out_of_range("size is zero");
     }
 
-    void changeCapacity(int newCapacity) {
-        if (newCapacity <= CAPACITY) {
-            throw std::bad_alloc();
-        }
-        T *data_ = new T[newCapacity];
-        for (auto i = 0; i < SIZE; ++i) {
-            data_[i] = data[i];
-        }
-        delete[] data;
-        data = data_;
-        CAPACITY = newCapacity;
-        index_to_new_elem = SIZE;
+    T &operator[](int i) { // возвращает i-ый член
+        if (m_cur_size != 0 and i < m_cur_size and i >= 0) {
+            if (m_cur_first + i > m_end)
+                return *(m_cur_first + i - m_capacity);
+            else
+                return *(m_cur_first + i);
+        } else
+            throw std::out_of_range("size is zero");
     }
-    //todo all functions O(1)
-    void addLast(T x) {
-        if (index_to_new_elem >= CAPACITY) {
-            index_to_new_elem = 0;
+
+    void changeCapacity(const int &value) {
+        CircularBuffer tmp(value);
+        for (int i = m_cur_size - 1; i >= 0; --i) {
+            tmp.addFirst((*this)[i]);
         }
-        if (SIZE == CAPACITY) {
-            data[index_to_new_elem] = x;
+
+        *this = tmp;
+        /*
+        T *temp = new T[value];
+        int size = std::min(m_cur_size, value);
+        for (int i = 0; i < size; ++i)
+            temp[i] = *(m_cur_first - i);
+        m_capacity = value;
+
+//        delete[] data;
+        data = new T[m_capacity];
+        for (int i = 0; i < size; ++i)
+            data[i] = temp[i];
+        m_end = &data[m_capacity - 1];
+        m_begin = data;
+        m_cur_first = data + size;
+        m_cur_last = m_begin;
+        delete[] temp;
+         */
+    }
+
+    void cyclic_inc(T *&ptr) {
+        if (ptr == m_end) {
+            ptr = m_begin;
         } else {
-            T *data_ = new T[SIZE + 1];
-            for (auto i = 0; i < SIZE; ++i) {
-                data_[i] = data[i];
-            }
-            data_[SIZE] = x;
-            delete[] data;
-            data = data_;
-            ++SIZE;
+            ++ptr;
         }
-        index_to_new_elem++;
     }
 
-    void delLast() {
-        if (SIZE == 0) {
-            throw std::out_of_range("out of range");
-        }
-        T *data_ = new T[SIZE - 1];
-        for (auto i = 0; i < SIZE - 1; ++i) {
-            data_[i] = data[i];
-        }
-        delete[] data;
-        data = data_;
-        --SIZE;
-    }
-
-    void addFirst(T x) {
-        if (SIZE == CAPACITY) {
-            T *data_ = new T[SIZE];
-            data_[0] = x;
-            for (auto i = 1; i < SIZE; ++i) {
-                data_[i] = data[i - 1];
-            }
-            delete[] data;
-            data = data_;
+    void cyclic_dec(T *&ptr) {
+        if (ptr == m_begin) {
+            ptr = m_end;
         } else {
-            T *data_ = new T[SIZE + 1];
-            for (auto i = 1; i < SIZE + 1; ++i) {
-                data_[i] = data[i - 1];
-            }
-            data_[0] = x;
-            delete[] data;
-            data = data_;
-            ++SIZE;
+            --ptr;
         }
-    }
-
-    void delFirst() {
-        if (SIZE == 0) {
-            throw std::out_of_range("https://otvet.mail.ru/question/40252019");
-        }
-        T *data_ = new T[SIZE - 1];
-        for (auto i = 0; i < SIZE; ++i) {
-            data_[i] = data[i + 1];
-        }
-        delete[] data;
-        data = data_;
-        --SIZE;
     }
 
 };
