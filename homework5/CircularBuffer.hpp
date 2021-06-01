@@ -254,7 +254,7 @@ public:
         }
         return *(m_cur_last);
     }
-
+    //todo more in exception
     T operator[](int i) const {
         if (m_cur_size != 0 and i < m_cur_size and i >= 0) {
             if (m_cur_first + i > m_end)
